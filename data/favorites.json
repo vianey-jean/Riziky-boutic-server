@@ -1,0 +1,39 @@
+
+[
+    {
+      "id": "fav1",
+      "userId": "2",
+      "productId": "1"
+    },
+    {
+      "id": "fav2",
+      "userId": "1",
+      "productId": "1"
+    },
+    {
+      "id": "fav3",
+      "userId": "2",
+      "productId": "2"
+    },
+    {
+      "id": "fav4",
+      "userId": "1",
+      "productId": "3"
+    },
+    {
+      "id": "fav5",
+      "userId": "2",
+      "productId": "3"
+    },
+    {
+      "id": "fav6",
+      "userId": "1",
+      "productId": "2"
+    },
+    {
+      "id": "fav7",
+      "userId": "2",
+      "productId": "5"
+    }
+  ]
+  

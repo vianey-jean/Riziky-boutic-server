@@ -1,0 +1,27 @@
+
+[
+  {
+    "id": "1",
+    "nom": "Admin",
+    "email": "admin@example.com",
+    "password": "admin123",
+    "role": "admin",
+    "dateCreation": "2025-04-26T10:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "nom": "Client Test",
+    "email": "client@example.com",
+    "password": "client123",
+    "role": "client",
+    "dateCreation": "2025-04-26T11:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "nom": "RABEMANALINA Jean",
+    "email": "vianey.jean@ymail.com",
+    "password": "Hummerh2@",
+    "role": "admin",
+    "dateCreation": "2025-04-26T11:00:00.000Z"
+  }
+]
