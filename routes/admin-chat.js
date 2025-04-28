@@ -9,7 +9,11 @@ const adminChatFilePath = path.join(__dirname, '../data/admin-chat.json');
 
 // Vérifier si le fichier admin-chat.json existe, sinon le créer
 if (!fs.existsSync(adminChatFilePath)) {
-  const initialData = { conversations: {} };
+  const initialData = { 
+    conversations: {},
+    onlineUsers: {},
+    autoReplySent: {}
+  };
   fs.writeFileSync(adminChatFilePath, JSON.stringify(initialData, null, 2));
 }
 
@@ -29,6 +33,81 @@ router.get('/admins', isAuthenticated, isAdmin, (req, res) => {
     res.json(safeAdmins);
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la récupération des administrateurs' });
+  }
+});
+
+// Marquer un admin comme en ligne
+router.post('/online', isAuthenticated, isAdmin, (req, res) => {
+  try {
+    const userId = req.user.id;
+    const chatData = JSON.parse(fs.readFileSync(adminChatFilePath));
+    
+    if (!chatData.onlineUsers) {
+      chatData.onlineUsers = {};
+    }
+    
+    chatData.onlineUsers[userId] = {
+      isOnline: true,
+      lastSeen: new Date().toISOString()
+    };
+    
+    fs.writeFileSync(adminChatFilePath, JSON.stringify(chatData, null, 2));
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du statut en ligne:", error);
+    res.status(500).json({ message: 'Erreur lors de la mise à jour du statut en ligne' });
+  }
+});
+
+// Marquer un admin comme hors ligne
+router.post('/offline', isAuthenticated, isAdmin, (req, res) => {
+  try {
+    const userId = req.user.id;
+    const chatData = JSON.parse(fs.readFileSync(adminChatFilePath));
+    
+    if (!chatData.onlineUsers) {
+      chatData.onlineUsers = {};
+    }
+    
+    chatData.onlineUsers[userId] = {
+      isOnline: false,
+      lastSeen: new Date().toISOString()
+    };
+    
+    fs.writeFileSync(adminChatFilePath, JSON.stringify(chatData, null, 2));
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du statut hors ligne:", error);
+    res.status(500).json({ message: 'Erreur lors de la mise à jour du statut hors ligne' });
+  }
+});
+
+// Vérifier si un admin est en ligne
+router.get('/status/:adminId', isAuthenticated, (req, res) => {
+  try {
+    const { adminId } = req.params;
+    const chatData = JSON.parse(fs.readFileSync(adminChatFilePath));
+    
+    if (!chatData.onlineUsers || !chatData.onlineUsers[adminId]) {
+      return res.json({ isOnline: false });
+    }
+    
+    // Si le dernier accès est plus ancien que 5 minutes, considérer l'admin comme hors ligne
+    const fiveMinutesAgo = new Date();
+    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+    
+    const lastSeen = new Date(chatData.onlineUsers[adminId].lastSeen);
+    const isOnline = chatData.onlineUsers[adminId].isOnline && lastSeen > fiveMinutesAgo;
+    
+    res.json({ 
+      isOnline, 
+      lastSeen: chatData.onlineUsers[adminId].lastSeen 
+    });
+  } catch (error) {
+    console.error("Erreur lors de la vérification du statut en ligne:", error);
+    res.status(500).json({ message: 'Erreur lors de la vérification du statut en ligne' });
   }
 });
 
@@ -87,7 +166,7 @@ router.get('/conversations/:adminId', isAuthenticated, isAdmin, (req, res) => {
 });
 
 // Envoyer un message
-router.post('/conversations/:adminId', isAuthenticated, isAdmin, (req, res) => {
+router.post('/conversations/:adminId', isAuthenticated, isAdmin, async (req, res) => {
   try {
     const { message } = req.body;
     const userId = req.user.id;
@@ -134,10 +213,53 @@ router.post('/conversations/:adminId', isAuthenticated, isAdmin, (req, res) => {
     };
     
     chatData.conversations[conversationId].messages.push(newMessage);
+    
+    // Vérifier si le destinataire est en ligne
+    const isRecipientOnline = chatData.onlineUsers && 
+                              chatData.onlineUsers[otherAdminId] && 
+                              chatData.onlineUsers[otherAdminId].isOnline;
+    
+    // Si le destinataire n'est pas en ligne, envoyer un message automatique
+    // mais seulement si un message auto n'a pas déjà été envoyé récemment dans cette conversation
+    if (!isRecipientOnline) {
+      // Initialiser l'objet autoReplySent s'il n'existe pas
+      if (!chatData.autoReplySent) {
+        chatData.autoReplySent = {};
+      }
+      
+      const lastAutoReply = chatData.autoReplySent[conversationId];
+      const now = new Date();
+      let shouldSendAutoReply = true;
+      
+      if (lastAutoReply) {
+        const lastReplyTime = new Date(lastAutoReply);
+        // Ne pas envoyer de réponse automatique si la dernière a été envoyée il y a moins de 2 heures
+        shouldSendAutoReply = (now.getTime() - lastReplyTime.getTime()) > (2 * 60 * 60 * 1000);
+      }
+      
+      if (shouldSendAutoReply) {
+        const autoMessage = {
+          id: `msg-auto-${Date.now()}`,
+          senderId: otherAdminId,
+          content: "Merci pour votre message. Je vais regarder ça dès que possible!",
+          timestamp: new Date().toISOString(),
+          read: false,
+          isAutoReply: true
+        };
+        
+        chatData.conversations[conversationId].messages.push(autoMessage);
+        chatData.autoReplySent[conversationId] = now.toISOString();
+      }
+    }
+    
     fs.writeFileSync(adminChatFilePath, JSON.stringify(chatData, null, 2));
     
-    res.status(201).json(newMessage);
+    res.status(201).json({
+      message: newMessage,
+      autoReply: !isRecipientOnline
+    });
   } catch (error) {
+    console.error("Erreur lors de l'envoi du message:", error);
     res.status(500).json({ message: 'Erreur lors de l\'envoi du message' });
   }
 });

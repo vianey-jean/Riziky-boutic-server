@@ -17,16 +17,26 @@ router.get('/:userId', isAuthenticated, (req, res) => {
     }
     
     const favorites = JSON.parse(fs.readFileSync(favoritesFilePath));
-    const userFavorites = favorites.find(f => f.userId === req.params.userId) || { userId: req.params.userId, items: [] };
+    const userFavorites = favorites.filter(f => f.userId === req.params.userId);
+    
+    if (!userFavorites || userFavorites.length === 0) {
+      return res.json({ userId: req.params.userId, items: [] });
+    }
     
     // Enrichir les favoris avec les détails des produits
     const products = JSON.parse(fs.readFileSync(productsFilePath));
-    userFavorites.items = userFavorites.items.map(itemId => {
-      return products.find(p => p.id === itemId) || itemId;
-    });
+    const favoriteProducts = [];
     
-    res.json(userFavorites);
+    for (const favorite of userFavorites) {
+      const product = products.find(p => p.id === favorite.productId);
+      if (product) {
+        favoriteProducts.push(product);
+      }
+    }
+    
+    res.json({ userId: req.params.userId, items: favoriteProducts });
   } catch (error) {
+    console.error('Erreur lors de la récupération des favoris:', error);
     res.status(500).json({ message: 'Erreur lors de la récupération des favoris' });
   }
 });
@@ -41,6 +51,10 @@ router.post('/:userId/add', isAuthenticated, (req, res) => {
     
     const { productId } = req.body;
     
+    if (!productId) {
+      return res.status(400).json({ message: 'ID de produit requis' });
+    }
+    
     // Vérifier que le produit existe
     const products = JSON.parse(fs.readFileSync(productsFilePath));
     const product = products.find(p => p.id === productId);
@@ -51,31 +65,44 @@ router.post('/:userId/add', isAuthenticated, (req, res) => {
     
     // Ajouter aux favoris
     const favorites = JSON.parse(fs.readFileSync(favoritesFilePath));
-    const favoriteIndex = favorites.findIndex(f => f.userId === req.params.userId);
     
-    if (favoriteIndex === -1) {
-      // Créer une nouvelle liste de favoris
-      favorites.push({
-        userId: req.params.userId,
-        items: [productId]
-      });
-    } else {
-      // Mettre à jour la liste existante
-      if (!favorites[favoriteIndex].items.includes(productId)) {
-        favorites[favoriteIndex].items.push(productId);
+    // Vérifier si le favori existe déjà
+    const existingFavorite = favorites.find(
+      f => f.userId === req.params.userId && f.productId === productId
+    );
+    
+    if (existingFavorite) {
+      // Le favori existe déjà
+      return res.status(400).json({ message: 'Ce produit est déjà dans vos favoris' });
+    }
+    
+    const newFavorite = {
+      id: `fav-${Date.now()}`,
+      userId: req.params.userId,
+      productId: productId
+    };
+    
+    favorites.push(newFavorite);
+    fs.writeFileSync(favoritesFilePath, JSON.stringify(favorites, null, 2));
+    
+    // Récupérer tous les favoris de l'utilisateur
+    const userFavorites = favorites.filter(f => f.userId === req.params.userId);
+    
+    // Enrichir la réponse avec les détails des produits
+    const favoriteProducts = [];
+    for (const fav of userFavorites) {
+      const p = products.find(p => p.id === fav.productId);
+      if (p) {
+        favoriteProducts.push(p);
       }
     }
     
-    fs.writeFileSync(favoritesFilePath, JSON.stringify(favorites, null, 2));
-    
-    const updatedFavorites = favorites.find(f => f.userId === req.params.userId);
-    // Enrichir les favoris avec les détails des produits pour la réponse
-    updatedFavorites.items = updatedFavorites.items.map(itemId => {
-      return products.find(p => p.id === itemId) || itemId;
+    res.json({ 
+      userId: req.params.userId, 
+      items: favoriteProducts 
     });
-    
-    res.json(updatedFavorites);
   } catch (error) {
+    console.error('Erreur lors de l\'ajout aux favoris:', error);
     res.status(500).json({ message: 'Erreur lors de l\'ajout aux favoris' });
   }
 });
@@ -89,25 +116,39 @@ router.delete('/:userId/remove/:productId', isAuthenticated, (req, res) => {
     }
     
     const favorites = JSON.parse(fs.readFileSync(favoritesFilePath));
-    const favoriteIndex = favorites.findIndex(f => f.userId === req.params.userId);
     
-    if (favoriteIndex === -1) {
-      return res.status(404).json({ message: 'Liste de favoris non trouvée' });
+    // Filtrer pour supprimer le favori spécifique
+    const updatedFavorites = favorites.filter(
+      f => !(f.userId === req.params.userId && f.productId === req.params.productId)
+    );
+    
+    if (updatedFavorites.length === favorites.length) {
+      return res.status(404).json({ message: 'Favori non trouvé' });
     }
     
-    favorites[favoriteIndex].items = favorites[favoriteIndex].items.filter(id => id !== req.params.productId);
+    fs.writeFileSync(favoritesFilePath, JSON.stringify(updatedFavorites, null, 2));
     
-    fs.writeFileSync(favoritesFilePath, JSON.stringify(favorites, null, 2));
+    // Récupérer tous les favoris restants de l'utilisateur
+    const userFavorites = updatedFavorites.filter(f => f.userId === req.params.userId);
     
+    // Enrichir la réponse avec les détails des produits
     const products = JSON.parse(fs.readFileSync(productsFilePath));
-    // Enrichir les favoris avec les détails des produits pour la réponse
-    favorites[favoriteIndex].items = favorites[favoriteIndex].items.map(itemId => {
-      return products.find(p => p.id === itemId) || itemId;
-    });
+    const favoriteProducts = [];
     
-    res.json(favorites[favoriteIndex]);
+    for (const fav of userFavorites) {
+      const product = products.find(p => p.id === fav.productId);
+      if (product) {
+        favoriteProducts.push(product);
+      }
+    }
+    
+    res.json({ 
+      userId: req.params.userId, 
+      items: favoriteProducts 
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de la suppression du produit des favoris' });
+    console.error('Erreur lors de la suppression du favori:', error);
+    res.status(500).json({ message: 'Erreur lors de la suppression du favori' });
   }
 });
 
