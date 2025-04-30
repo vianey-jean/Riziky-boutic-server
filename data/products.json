@@ -7,11 +7,17 @@
     "originalPrice": 79.99,
     "promotion": null,
     "promotionEnd": null,
-    "image": "/uploads/1745774108889.jpg",
+    "image": "/uploads/images-1746015763639-744355797.JPG",
     "category": "electronique",
-    "stock": 15,
+    "stock": 5,
     "isSold": true,
-    "dateAjout": "2025-04-20T10:00:00.000Z"
+    "dateAjout": "2025-04-20T10:00:00.000Z",
+    "images": [
+      "/uploads/images-1746015763639-744355797.JPG",
+      "/uploads/images-1746015763651-386309464.JPG",
+      "/uploads/images-1746015763669-54683783.JPG",
+      "/uploads/images-1746015763673-316084892.JPG"
+    ]
   },
   {
     "id": "2",
@@ -23,7 +29,7 @@
     "promotionEnd": "2025-04-28T17:16:21.116Z",
     "image": "/uploads/1745774116030.jpg",
     "category": "maison",
-    "stock": 8,
+    "stock": 7,
     "isSold": true,
     "dateAjout": "2025-04-23T10:00:00.000Z"
   },
@@ -37,7 +43,7 @@
     "promotionEnd": null,
     "image": "/uploads/1745774122770.jpg",
     "category": "mode",
-    "stock": 5,
+    "stock": 4,
     "isSold": true,
     "dateAjout": "2025-04-25T10:00:00.000Z"
   },
@@ -51,7 +57,7 @@
     "promotionEnd": null,
     "image": "/uploads/1745774131685.jpg",
     "category": "beaute",
-    "stock": 12,
+    "stock": 11,
     "isSold": true,
     "dateAjout": "2025-04-22T10:00:00.000Z"
   },
@@ -65,9 +71,12 @@
     "promotionEnd": null,
     "image": "/uploads/1745774137467.jpg",
     "category": "Sport",
-    "stock": 7,
+    "stock": 10,
     "isSold": true,
-    "dateAjout": "2025-04-18T10:00:00.000Z"
+    "dateAjout": "2025-04-18T10:00:00.000Z",
+    "images": [
+      "/uploads/1745774137467.jpg"
+    ]
   },
   {
     "id": "6",
@@ -79,9 +88,12 @@
     "promotionEnd": null,
     "image": "/uploads/1745774144748.jpg",
     "category": "bijoux",
-    "stock": 20,
+    "stock": 10,
     "isSold": true,
-    "dateAjout": "2025-04-15T10:00:00.000Z"
+    "dateAjout": "2025-04-15T10:00:00.000Z",
+    "images": [
+      "/uploads/1745774144748.jpg"
+    ]
   },
   {
     "id": "7",
@@ -95,7 +107,10 @@
     "category": "electronique",
     "stock": 0,
     "isSold": false,
-    "dateAjout": "2025-04-10T10:00:00.000Z"
+    "dateAjout": "2025-04-10T10:00:00.000Z",
+    "images": [
+      "/uploads/1745774151680.jpg"
+    ]
   },
   {
     "id": "8",

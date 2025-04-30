@@ -17,6 +17,8 @@ const initResetCodes = () => {
 
 initResetCodes();
 
+
+
 // Inscription
 router.post('/register', (req, res) => {
   try {

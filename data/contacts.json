@@ -1,4 +1,3 @@
-
 [
   {
     "id": "contact-1745703149897",
@@ -10,6 +9,6 @@
     "objet": "plaindre",
     "message": "merci beaucoup",
     "dateCreation": "2025-04-26T21:32:29.897Z",
-    "read": true
+    "read": false
   }
 ]

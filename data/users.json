@@ -1,4 +1,3 @@
-
 [
   {
     "id": "1",
@@ -18,10 +17,17 @@
   },
   {
     "id": "3",
-    "nom": "RABEMANALINA Jean",
+    "nom": "RABEMANALINA ",
     "email": "vianey.jean@ymail.com",
     "password": "Hummerh2@",
     "role": "admin",
-    "dateCreation": "2025-04-26T11:00:00.000Z"
+    "dateCreation": "2025-04-26T11:00:00.000Z",
+    "prenom": "Jean",
+    "adresse": "21 rue de paris",
+    "ville": "St Denis",
+    "codePostal": "97400",
+    "pays": "La Réunion",
+    "telephone": "0692198701",
+    "genre": "homme"
   }
 ]

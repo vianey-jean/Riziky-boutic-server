@@ -1,0 +1,11 @@
+[
+  {
+    "userId": "3",
+    "preferences": {
+      "emailNotifications": true,
+      "marketingEmails": true,
+      "productUpdates": true,
+      "orderStatusUpdates": true
+    }
+  }
+]
