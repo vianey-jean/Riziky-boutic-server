@@ -1,9 +1,9 @@
+
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
-const crypto = require('crypto');
 
 const usersFilePath = path.join(__dirname, '../data/users.json');
 const resetCodesPath = path.join(__dirname, '../data/reset-codes.json');
@@ -17,25 +17,6 @@ const initResetCodes = () => {
 
 initResetCodes();
 
-// Fonction de cryptage du mot de passe
-const encryptPassword = (password) => {
-  const salt = "RIZIKY_SALT_SECRET"; // Devrait être stocké en variable d'environnement
-  return Buffer.from(`${salt}:${password}`).toString('base64');
-};
-
-// Fonction de décryptage du mot de passe
-const decryptPassword = (encryptedPassword) => {
-  const decoded = Buffer.from(encryptedPassword, 'base64').toString('utf-8');
-  const salt = "RIZIKY_SALT_SECRET";
-  return decoded.substring(salt.length + 1);
-};
-
-// Fonction de vérification de mot de passe
-const verifyPassword = (password, encryptedPassword) => {
-  const decryptedPassword = decryptPassword(encryptedPassword);
-  return password === decryptedPassword;
-};
-
 // Inscription
 router.post('/register', (req, res) => {
   try {
@@ -46,19 +27,6 @@ router.post('/register', (req, res) => {
       return res.status(400).json({ message: 'Veuillez remplir tous les champs obligatoires' });
     }
     
-    // Validation de la complexité du mot de passe
-    const hasUppercase = /[A-Z]/.test(password);
-    const hasLowercase = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
-    const isLongEnough = password.length >= 8;
-    
-    if (!hasUppercase || !hasLowercase || !hasNumber || !hasSpecialChar || !isLongEnough) {
-      return res.status(400).json({
-        message: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial'
-      });
-    }
-    
     const users = JSON.parse(fs.readFileSync(usersFilePath));
     
     // Vérifier si l'email existe déjà
@@ -66,15 +34,12 @@ router.post('/register', (req, res) => {
       return res.status(400).json({ message: 'Cet email est déjà utilisé' });
     }
     
-    // Crypter le mot de passe
-    const encryptedPassword = encryptPassword(password);
-    
     // Créer un nouvel utilisateur
     const newUser = {
       id: `user-${Date.now()}`,
       nom,
       email,
-      password: encryptedPassword, // Mot de passe crypté
+      password, // Dans un vrai projet, hacher le mot de passe avec bcrypt
       role: 'client',
       dateCreation: new Date().toISOString()
     };
@@ -87,7 +52,7 @@ router.post('/register', (req, res) => {
     
     res.status(201).json({
       user: safeUser,
-      token: newUser.id
+      token: newUser.id // Dans un vrai projet, utiliser JWT
     });
   } catch (error) {
     console.error("Erreur lors de l'inscription:", error);
@@ -101,15 +66,9 @@ router.post('/login', (req, res) => {
     const { email, password } = req.body;
     
     const users = JSON.parse(fs.readFileSync(usersFilePath));
-    const user = users.find(u => u.email === email);
+    const user = users.find(u => u.email === email && u.password === password);
     
     if (!user) {
-      return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
-    }
-    
-    // Vérifier le mot de passe
-    const isPasswordValid = verifyPassword(password, user.password);
-    if (!isPasswordValid) {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
     }
     
@@ -118,7 +77,7 @@ router.post('/login', (req, res) => {
     
     res.json({
       user: safeUser,
-      token: user.id
+      token: user.id // Dans un vrai projet, utiliser JWT
     });
   } catch (error) {
     console.error("Erreur lors de la connexion:", error);
@@ -173,19 +132,6 @@ router.post('/reset-password', (req, res) => {
   try {
     const { email, code, newPassword } = req.body;
     
-    // Validation de la complexité du mot de passe
-    const hasUppercase = /[A-Z]/.test(newPassword);
-    const hasLowercase = /[a-z]/.test(newPassword);
-    const hasNumber = /[0-9]/.test(newPassword);
-    const hasSpecialChar = /[^A-Za-z0-9]/.test(newPassword);
-    const isLongEnough = newPassword.length >= 8;
-    
-    if (!hasUppercase || !hasLowercase || !hasNumber || !hasSpecialChar || !isLongEnough) {
-      return res.status(400).json({
-        message: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial'
-      });
-    }
-    
     // Vérifier le code de réinitialisation
     const resetCodes = JSON.parse(fs.readFileSync(resetCodesPath));
     const resetRequest = resetCodes.find(rc => rc.email === email && rc.code === code);
@@ -207,8 +153,8 @@ router.post('/reset-password', (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
     
-    // Crypter et mettre à jour le mot de passe
-    users[userIndex].password = encryptPassword(newPassword);
+    // Mettre à jour le mot de passe
+    users[userIndex].password = newPassword; // Dans un vrai projet, hacher le mot de passe
     
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
     
@@ -249,32 +195,6 @@ router.get('/verify-token', (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la vérification du token:", error);
     res.status(500).json({ valid: false });
-  }
-});
-
-// Vérifier le mot de passe
-router.post('/verify-password', (req, res) => {
-  try {
-    const { userId, password } = req.body;
-    
-    if (!userId || !password) {
-      return res.status(400).json({ message: 'UserId et mot de passe requis' });
-    }
-    
-    const users = JSON.parse(fs.readFileSync(usersFilePath));
-    const user = users.find(u => u.id === userId);
-    
-    if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    }
-    
-    // Vérifier le mot de passe
-    const isPasswordValid = verifyPassword(password, user.password);
-    
-    res.json({ valid: isPasswordValid });
-  } catch (error) {
-    console.error("Erreur lors de la vérification du mot de passe:", error);
-    res.status(500).json({ message: 'Erreur lors de la vérification du mot de passe' });
   }
 });
 

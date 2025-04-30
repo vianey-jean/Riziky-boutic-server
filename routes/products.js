@@ -148,13 +148,9 @@ router.get('/:id', checkFileExists, (req, res) => {
 });
 
 // Créer un nouveau produit (admin seulement)
-router.post('/', isAuthenticated, isAdmin, upload.array('images', 4), checkFileExists, (req, res) => {
+router.post('/', isAuthenticated, isAdmin, upload.single('image'), checkFileExists, (req, res) => {
   try {
     const products = JSON.parse(fs.readFileSync(productsFilePath));
-    
-    const images = req.files && req.files.length > 0 
-      ? req.files.map(file => `/uploads/${file.filename}`) 
-      : ['/placeholder.svg'];
     
     const newProduct = {
       id: Date.now().toString(),
@@ -163,8 +159,7 @@ router.post('/', isAuthenticated, isAdmin, upload.array('images', 4), checkFileE
       price: parseFloat(req.body.price),
       originalPrice: parseFloat(req.body.price),
       category: req.body.category,
-      images: images,
-      image: images[0], // For backwards compatibility
+      image: req.file ? `/uploads/${req.file.filename}` : '/placeholder.svg',
       promotion: req.body.promotion ? parseInt(req.body.promotion) : null,
       promotionEnd: req.body.promotionEnd || null,
       stock: parseInt(req.body.stock) || 0,
@@ -182,30 +177,13 @@ router.post('/', isAuthenticated, isAdmin, upload.array('images', 4), checkFileE
 });
 
 // Mettre à jour un produit (admin seulement)
-router.put('/:id', isAuthenticated, isAdmin, upload.array('images', 4), checkFileExists, (req, res) => {
+router.put('/:id', isAuthenticated, isAdmin, upload.single('image'), checkFileExists, (req, res) => {
   try {
     const products = JSON.parse(fs.readFileSync(productsFilePath));
     const index = products.findIndex(p => p.id === req.params.id);
     
     if (index === -1) {
       return res.status(404).json({ message: 'Produit non trouvé' });
-    }
-    
-    // Préserver les images existantes si aucune nouvelle n'est envoyée
-    let images = products[index].images || [products[index].image];
-    
-    // Si de nouvelles images sont envoyées, les utiliser
-    if (req.files && req.files.length > 0) {
-      images = req.files.map(file => `/uploads/${file.filename}`);
-    }
-    
-    // Si le JSON des images est envoyé, le parser et l'utiliser
-    if (req.body.imagesJson) {
-      try {
-        images = JSON.parse(req.body.imagesJson);
-      } catch (e) {
-        console.error('Erreur lors du parsing des images JSON:', e);
-      }
     }
     
     const updatedProduct = {
@@ -217,17 +195,19 @@ router.put('/:id', isAuthenticated, isAdmin, upload.array('images', 4), checkFil
       promotion: req.body.promotion !== undefined ? parseInt(req.body.promotion) : products[index].promotion,
       promotionEnd: req.body.promotionEnd || products[index].promotionEnd,
       stock: req.body.stock !== undefined ? parseInt(req.body.stock) : products[index].stock,
-      isSold: req.body.isSold !== undefined ? req.body.isSold === 'true' : products[index].isSold,
-      images: images,
-      image: images[0], // Pour la compatibilité avec le code existant
+      isSold: req.body.stock !== undefined ? parseInt(req.body.stock) > 0 : products[index].isSold,
     };
+    
+    if (req.file) {
+      // Si une nouvelle image est uploadée, mettre à jour le chemin
+      updatedProduct.image = `/uploads/${req.file.filename}`;
+    }
     
     products[index] = updatedProduct;
     fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2));
     
     res.json(updatedProduct);
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du produit:', error);
     res.status(500).json({ message: 'Erreur lors de la mise à jour du produit' });
   }
 });

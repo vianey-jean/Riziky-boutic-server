@@ -90,16 +90,13 @@ router.post('/', isAuthenticated, async (req, res) => {
       product.stock -= item.quantity;
       product.isSold = product.stock > 0;
       
-      // Ajouter le produit à la commande avec TOUS les détails pertinents
+      // Ajouter le produit à la commande
       const orderItem = {
         productId: product.id,
         name: product.name,
         price: product.price,
-        originalPrice: product.originalPrice || product.price,
         quantity: item.quantity,
-        image: product.image || '/placeholder.svg',
-        description: product.description,
-        category: product.category,
+        image: product.image,
         subtotal: product.price * item.quantity
       };
       

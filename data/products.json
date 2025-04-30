@@ -7,17 +7,11 @@
     "originalPrice": 79.99,
     "promotion": null,
     "promotionEnd": null,
-    "image": "/uploads/images-1745994490892-363395873.JPG",
+    "image": "/uploads/1745774108889.jpg",
     "category": "electronique",
-    "stock": 13,
+    "stock": 15,
     "isSold": true,
-    "dateAjout": "2025-04-20T10:00:00.000Z",
-    "images": [
-      "/uploads/images-1745994490892-363395873.JPG",
-      "/uploads/images-1745994490898-753191344.JPG",
-      "/uploads/images-1745994490918-781501810.JPG",
-      "/uploads/images-1745994490920-45962097.JPG"
-    ]
+    "dateAjout": "2025-04-20T10:00:00.000Z"
   },
   {
     "id": "2",
