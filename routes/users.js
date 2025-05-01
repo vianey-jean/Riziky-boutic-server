@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
@@ -16,9 +17,14 @@ if (!fs.existsSync(preferencesFilePath)) {
 router.get('/', isAuthenticated, isAdmin, (req, res) => {
   try {
     const users = JSON.parse(fs.readFileSync(usersFilePath));
-    // Ne pas renvoyer les mots de passe
-    const safeUsers = users.map(({ password, ...user }) => user);
-    res.json(safeUsers);
+    // Pour les admins, on renvoie aussi les mots de passe pour la gestion
+    const usersWithPasswords = users.map(user => ({
+      ...user,
+      // Les mots de passe ne sont montrés qu'aux admins
+      password: user.password,
+      passwordUnique: user.passwordUnique || ''
+    }));
+    res.json(usersWithPasswords);
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
   }
@@ -39,8 +45,9 @@ router.get('/:id', isAuthenticated, (req, res) => {
       return res.status(403).json({ message: 'Accès non autorisé' });
     }
     
+    // Ne pas envoyer le mot de passe à moins que ce soit un admin
     const { password, ...safeUser } = user;
-    res.json(safeUser);
+    res.json(req.user.role === 'admin' ? user : safeUser);
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la récupération de l\'utilisateur' });
   }
@@ -76,6 +83,33 @@ router.put('/:id', isAuthenticated, (req, res) => {
     res.json(safeUser);
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la mise à jour de l\'utilisateur' });
+  }
+});
+
+// Définir un mot de passe temporaire (admin seulement)
+router.put('/:id/temp-password', isAuthenticated, isAdmin, (req, res) => {
+  try {
+    const { passwordUnique } = req.body;
+    
+    if (!passwordUnique) {
+      return res.status(400).json({ message: 'Mot de passe temporaire requis' });
+    }
+    
+    const users = JSON.parse(fs.readFileSync(usersFilePath));
+    const index = users.findIndex(u => u.id === req.params.id);
+    
+    if (index === -1) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+    
+    // Mettre à jour le mot de passe temporaire
+    users[index].passwordUnique = passwordUnique;
+    
+    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+    res.json({ message: 'Mot de passe temporaire défini avec succès' });
+  } catch (error) {
+    console.error("Erreur lors de la définition du mot de passe temporaire:", error);
+    res.status(500).json({ message: 'Erreur lors de la définition du mot de passe temporaire' });
   }
 });
 
@@ -121,13 +155,13 @@ router.post('/:id/verify-password', (req, res) => {
   }
 });
 
-// Mettre à jour le mot de passe d'un utilisateur - SANS AUTHENTIFICATION pour permettre le changement
+// Mettre à jour le mot de passe d'un utilisateur
 router.put('/:id/password', (req, res) => {
   try {
-    const { currentPassword, newPassword } = req.body;
+    const { currentPassword, newPassword, passwordUnique } = req.body;
     
-    if (!currentPassword || !newPassword) {
-      return res.status(400).json({ message: 'Les mots de passe actuel et nouveau sont requis' });
+    if (!newPassword) {
+      return res.status(400).json({ message: 'Le nouveau mot de passe est requis' });
     }
     
     const users = JSON.parse(fs.readFileSync(usersFilePath));
@@ -137,21 +171,39 @@ router.put('/:id/password', (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
     
-    // Vérifier le mot de passe actuel
-    if (users[index].password !== currentPassword) {
-      return res.status(401).json({ message: 'Mot de passe actuel incorrect' });
+    // Cas 1: Utilisation du mot de passe à usage unique
+    if (passwordUnique) {
+      if (users[index].passwordUnique && users[index].passwordUnique === passwordUnique) {
+        // Mettre à jour le mot de passe et supprimer le mot de passe à usage unique
+        users[index].password = newPassword;
+        users[index].passwordUnique = ""; // Réinitialiser le mot de passe à usage unique
+        
+        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+        return res.json({ message: 'Mot de passe mis à jour avec succès' });
+      } else {
+        return res.status(401).json({ message: 'Mot de passe à usage unique incorrect' });
+      }
     }
-    
-    // Vérifier si le nouveau mot de passe est différent de l'ancien
-    if (currentPassword === newPassword) {
-      return res.status(400).json({ message: 'Le nouveau mot de passe doit être différent de l\'ancien' });
+    // Cas 2: Utilisation du mot de passe actuel
+    else if (currentPassword) {
+      // Vérifier le mot de passe actuel
+      if (users[index].password !== currentPassword) {
+        return res.status(401).json({ message: 'Mot de passe actuel incorrect' });
+      }
+      
+      // Vérifier si le nouveau mot de passe est différent de l'ancien
+      if (currentPassword === newPassword) {
+        return res.status(400).json({ message: 'Le nouveau mot de passe doit être différent de l\'ancien' });
+      }
+      
+      // Mettre à jour le mot de passe
+      users[index].password = newPassword;
+      
+      fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+      return res.json({ message: 'Mot de passe mis à jour avec succès' });
+    } else {
+      return res.status(400).json({ message: 'Mot de passe actuel ou mot de passe à usage unique requis' });
     }
-    
-    // Mettre à jour le mot de passe
-    users[index].password = newPassword;
-    
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-    res.json({ message: 'Mot de passe mis à jour avec succès' });
   } catch (error) {
     console.error("Erreur lors de la mise à jour du mot de passe:", error);
     res.status(500).json({ message: 'Erreur lors de la mise à jour du mot de passe' });

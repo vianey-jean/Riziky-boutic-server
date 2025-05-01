@@ -3,7 +3,7 @@
     "id": "1",
     "nom": "Admin",
     "email": "admin@example.com",
-    "password": "admin123",
+    "password": "Admin123@",
     "role": "admin",
     "dateCreation": "2025-04-26T10:00:00.000Z"
   },
@@ -13,7 +13,8 @@
     "email": "client@example.com",
     "password": "client123",
     "role": "client",
-    "dateCreation": "2025-04-26T11:00:00.000Z"
+    "dateCreation": "2025-04-26T11:00:00.000Z",
+    "passwordUnique": "Azerty123@"
   },
   {
     "id": "3",
@@ -29,8 +30,7 @@
     "pays": "La Réunion",
     "telephone": "0692198701",
     "genre": "homme"
-  }
-  ,
+  },
   {
     "id": "4",
     "nom": "Bekoto",

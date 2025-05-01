@@ -1,9 +1,9 @@
-
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 const usersFilePath = path.join(__dirname, '../data/users.json');
 const resetCodesPath = path.join(__dirname, '../data/reset-codes.json');
@@ -193,47 +193,37 @@ router.post('/verify-reset-code', (req, res) => {
 });
 
 // Réinitialiser le mot de passe
-router.post('/reset-password', (req, res) => {
+router.post('/reset-password', async (req, res) => {
   try {
-    const { email, code, newPassword } = req.body;
+    const { email, passwordUnique, newPassword } = req.body;
     
-    if (!email || !code || !newPassword) {
-      return res.status(400).json({ message: 'Email, code et nouveau mot de passe requis' });
+    if (!email || !passwordUnique || !newPassword) {
+      return res.status(400).json({ message: 'Tous les champs sont requis' });
     }
     
-    // Vérifier le code de réinitialisation
-    const resetCodes = JSON.parse(fs.readFileSync(resetCodesPath));
-    const resetRequest = resetCodes.find(rc => rc.email === email && rc.code === code);
+    const usersPath = path.join(__dirname, '../data/users.json');
+    const users = JSON.parse(fs.readFileSync(usersPath));
     
-    if (!resetRequest) {
-      return res.status(400).json({ message: 'Code de réinitialisation invalide' });
-    }
-    
-    // Vérifier si le code n'a pas expiré
-    if (new Date() > new Date(resetRequest.expiresAt)) {
-      return res.status(400).json({ message: 'Le code de réinitialisation a expiré' });
-    }
-    
-    // Mettre à jour le mot de passe
-    const users = JSON.parse(fs.readFileSync(usersFilePath));
     const userIndex = users.findIndex(u => u.email === email);
     
     if (userIndex === -1) {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
     
-    // Mettre à jour le mot de passe
+    // Vérifier le mot de passe à usage unique
+    if (!users[userIndex].passwordUnique || users[userIndex].passwordUnique !== passwordUnique) {
+      return res.status(400).json({ message: 'Code temporaire invalide' });
+    }
+    
+    // Mettre à jour le mot de passe et effacer le mot de passe temporaire
     users[userIndex].password = newPassword;
+    users[userIndex].passwordUnique = '';
     
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+    fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
     
-    // Supprimer le code de réinitialisation utilisé
-    const updatedResetCodes = resetCodes.filter(rc => !(rc.email === email && rc.code === code));
-    fs.writeFileSync(resetCodesPath, JSON.stringify(updatedResetCodes, null, 2));
-    
-    res.json({ success: true, message: 'Mot de passe réinitialisé avec succès' });
+    res.json({ message: 'Mot de passe réinitialisé avec succès' });
   } catch (error) {
-    console.error("Erreur lors de la réinitialisation du mot de passe:", error);
+    console.error('Erreur lors de la réinitialisation du mot de passe:', error);
     res.status(500).json({ message: 'Erreur lors de la réinitialisation du mot de passe' });
   }
 });
@@ -321,6 +311,33 @@ router.post('/verify-password', (req, res) => {
       valid: false, 
       message: 'Erreur lors de la vérification du mot de passe' 
     });
+  }
+});
+
+// Ajout d'une route pour vérifier le mot de passe temporaire
+router.post('/verify-temp-password', async (req, res) => {
+  try {
+    const { email, passwordUnique } = req.body;
+    
+    if (!email || !passwordUnique) {
+      return res.status(400).json({ message: 'Email et mot de passe temporaire requis' });
+    }
+    
+    const usersPath = path.join(__dirname, '../data/users.json');
+    const users = JSON.parse(fs.readFileSync(usersPath));
+    
+    const user = users.find(u => u.email === email);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+    
+    const isValid = user.passwordUnique === passwordUnique;
+    
+    res.json({ valid: isValid });
+  } catch (error) {
+    console.error('Erreur lors de la vérification du mot de passe temporaire:', error);
+    res.status(500).json({ message: 'Erreur lors de la vérification du mot de passe temporaire' });
   }
 });
 
