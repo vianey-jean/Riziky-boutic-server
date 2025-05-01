@@ -25,9 +25,9 @@
       "telephone": "0936254101"
     },
     "paymentMethod": "Card",
-    "status": "en préparation",
+    "status": "livrée",
     "createdAt": "2025-04-28T12:26:25.802Z",
-    "updatedAt": "2025-04-28T12:45:40.702Z"
+    "updatedAt": "2025-05-01T13:45:50.732Z"
   },
   {
     "id": "ORD-1745843437022",
@@ -478,5 +478,35 @@
     "status": "confirmée",
     "createdAt": "2025-04-30T14:03:27.396Z",
     "updatedAt": "2025-04-30T14:03:27.396Z"
+  },
+  {
+    "id": "ORD-1746107124760",
+    "userId": "3",
+    "userName": "RABEMANALINA ",
+    "userEmail": "vianey.jean@ymail.com",
+    "items": [
+      {
+        "productId": "1",
+        "name": "Écouteurs Sans Fil",
+        "price": 79.99,
+        "quantity": 1,
+        "image": "/uploads/images-1746015763639-744355797.JPG",
+        "subtotal": 79.99
+      }
+    ],
+    "totalAmount": 79.99,
+    "shippingAddress": {
+      "nom": "RABEMANALINA ",
+      "prenom": "Jean",
+      "adresse": "21 rue de paris",
+      "ville": "St Denis",
+      "codePostal": "97400",
+      "pays": "France",
+      "telephone": "0692198701"
+    },
+    "paymentMethod": "stripe",
+    "status": "confirmée",
+    "createdAt": "2025-05-01T13:45:24.761Z",
+    "updatedAt": "2025-05-01T13:45:24.761Z"
   }
 ]

@@ -1,4 +1,3 @@
-
 [
   {
     "id": "fav1",
@@ -34,5 +33,10 @@
     "id": "fav7",
     "userId": "2",
     "productId": "5"
+  },
+  {
+    "id": "fav-1746106913346",
+    "userId": "3",
+    "productId": "1"
   }
 ]
