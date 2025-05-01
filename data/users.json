@@ -30,4 +30,13 @@
     "telephone": "0692198701",
     "genre": "homme"
   }
+  ,
+  {
+    "id": "4",
+    "nom": "Bekoto",
+    "email": "bekotoj@yahoo.fr",
+    "password": "admin123@",
+    "role": "admin",
+    "dateCreation": "2025-04-26T10:00:00.000Z"
+  }
 ]
