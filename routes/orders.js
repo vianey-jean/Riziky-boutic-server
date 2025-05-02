@@ -90,13 +90,24 @@ router.post('/', isAuthenticated, async (req, res) => {
       product.stock -= item.quantity;
       product.isSold = product.stock > 0;
       
-      // Ajouter le produit à la commande
+      // Déterminer l'image principale à utiliser
+      let productImage = '';
+      
+      // Si le produit a plusieurs images, utiliser la première
+      if (product.images && product.images.length > 0) {
+        productImage = product.images[0];
+      } else if (product.image) {
+        // Sinon, utiliser l'image unique du produit
+        productImage = product.image;
+      }
+      
+      // Ajouter le produit à la commande avec l'image correcte
       const orderItem = {
         productId: product.id,
         name: product.name,
         price: product.price,
         quantity: item.quantity,
-        image: product.image,
+        image: productImage, // Utiliser l'image principale
         subtotal: product.price * item.quantity
       };
       

@@ -1,6 +1,12 @@
 [
   {
     "userId": "3",
-    "items": []
+    "items": [
+      {
+        "productId": "4",
+        "quantity": 1,
+        "price": 59.99
+      }
+    ]
   }
 ]

@@ -7,16 +7,13 @@
     "originalPrice": 79.99,
     "promotion": null,
     "promotionEnd": null,
-    "image": "/uploads/images-1746015763639-744355797.JPG",
-    "category": "electronique",
-    "stock": 4,
+    "image": "/uploads/images-1746178401644-377182347.jpg",
+    "category": "Électronique",
+    "stock": 10,
     "isSold": true,
     "dateAjout": "2025-04-20T10:00:00.000Z",
     "images": [
-      "/uploads/images-1746015763639-744355797.JPG",
-      "/uploads/images-1746015763651-386309464.JPG",
-      "/uploads/images-1746015763669-54683783.JPG",
-      "/uploads/images-1746015763673-316084892.JPG"
+      "/uploads/images-1746178401644-377182347.jpg"
     ]
   },
   {
@@ -27,11 +24,14 @@
     "originalPrice": 117,
     "promotion": 25,
     "promotionEnd": "2025-04-28T17:16:21.116Z",
-    "image": "/uploads/1745774116030.jpg",
+    "image": "/uploads/images-1746178466878-670798831.jpg",
     "category": "maison",
     "stock": 7,
     "isSold": true,
-    "dateAjout": "2025-04-23T10:00:00.000Z"
+    "dateAjout": "2025-04-23T10:00:00.000Z",
+    "images": [
+      "/uploads/images-1746178466878-670798831.jpg"
+    ]
   },
   {
     "id": "3",
@@ -41,11 +41,14 @@
     "originalPrice": 149.99,
     "promotion": null,
     "promotionEnd": null,
-    "image": "/uploads/1745774122770.jpg",
-    "category": "mode",
-    "stock": 4,
+    "image": "/uploads/images-1746178553296-265467827.jpg",
+    "category": "Électronique",
+    "stock": 10,
     "isSold": true,
-    "dateAjout": "2025-04-25T10:00:00.000Z"
+    "dateAjout": "2025-04-25T10:00:00.000Z",
+    "images": [
+      "/uploads/images-1746178553296-265467827.jpg"
+    ]
   },
   {
     "id": "4",
@@ -55,11 +58,16 @@
     "originalPrice": 59.99,
     "promotion": null,
     "promotionEnd": null,
-    "image": "/uploads/1745774131685.jpg",
+    "image": "/uploads/images-1746178730769-156593522.jpg",
     "category": "beaute",
     "stock": 11,
     "isSold": true,
-    "dateAjout": "2025-04-22T10:00:00.000Z"
+    "dateAjout": "2025-04-22T10:00:00.000Z",
+    "images": [
+      "/uploads/images-1746178730769-156593522.jpg",
+      "/uploads/images-1746178730775-247221090.jpg",
+      "/uploads/images-1746178730782-247774381.jpg"
+    ]
   },
   {
     "id": "5",
@@ -69,13 +77,13 @@
     "originalPrice": 89.99,
     "promotion": null,
     "promotionEnd": null,
-    "image": "/uploads/1745774137467.jpg",
+    "image": "/uploads/images-1746178617306-780425094.jpg",
     "category": "Sport",
     "stock": 10,
     "isSold": true,
     "dateAjout": "2025-04-18T10:00:00.000Z",
     "images": [
-      "/uploads/1745774137467.jpg"
+      "/uploads/images-1746178617306-780425094.jpg"
     ]
   },
   {
@@ -86,13 +94,13 @@
     "originalPrice": 45.99,
     "promotion": null,
     "promotionEnd": null,
-    "image": "/uploads/1745774144748.jpg",
+    "image": "/uploads/images-1746178896141-219170716.jpg",
     "category": "bijoux",
     "stock": 10,
     "isSold": true,
     "dateAjout": "2025-04-15T10:00:00.000Z",
     "images": [
-      "/uploads/1745774144748.jpg"
+      "/uploads/images-1746178896141-219170716.jpg"
     ]
   },
   {
@@ -103,13 +111,13 @@
     "originalPrice": 69.99,
     "promotion": null,
     "promotionEnd": null,
-    "image": "/uploads/1745774151680.jpg",
+    "image": "/uploads/images-1746179016620-222342998.jpg",
     "category": "electronique",
     "stock": 0,
     "isSold": false,
     "dateAjout": "2025-04-10T10:00:00.000Z",
     "images": [
-      "/uploads/1745774151680.jpg"
+      "/uploads/images-1746179016620-222342998.jpg"
     ]
   },
   {
@@ -120,10 +128,30 @@
     "originalPrice": 104.99,
     "promotion": null,
     "promotionEnd": null,
-    "image": "/uploads/1745774165249.jpg",
+    "image": "/uploads/images-1746179069022-631439284.jpg",
     "category": "Électronique",
     "stock": 10,
     "isSold": true,
-    "dateAjout": "2025-04-05T10:00:00.000Z"
+    "dateAjout": "2025-04-05T10:00:00.000Z",
+    "images": [
+      "/uploads/images-1746179069022-631439284.jpg"
+    ]
+  },
+  {
+    "id": "1746179217151",
+    "name": "Téléphone Jaune",
+    "description": "Une Téléphone fixe ancien, encore très bonne a utilisé",
+    "price": 99.99,
+    "originalPrice": 99.99,
+    "category": "Électronique",
+    "images": [
+      "/uploads/images-1746179217148-314861272.jpg"
+    ],
+    "image": "/uploads/images-1746179217148-314861272.jpg",
+    "promotion": null,
+    "promotionEnd": null,
+    "stock": 6,
+    "isSold": true,
+    "dateAjout": "2025-05-02T09:46:57.151Z"
   }
 ]
