@@ -1,53 +1,53 @@
 [
   {
-    "id": "ORD-1746177895668",
+    "id": "ORD-1746183399126",
     "userId": "3",
     "userName": "RABEMANALINA ",
     "userEmail": "vianey.jean@ymail.com",
     "items": [
       {
-        "productId": "1",
-        "name": "Écouteurs Sans Fil",
-        "price": 79.99,
+        "productId": "4",
+        "name": "Sac à Dos de Randonnée",
+        "price": 59.99,
         "quantity": 1,
-        "image": "/uploads/images-1746015763639-744355797.JPG",
-        "subtotal": 79.99
+        "image": "/uploads/images-1746178730769-156593522.jpg",
+        "subtotal": 59.99
       }
     ],
-    "totalAmount": 79.99,
+    "totalAmount": 59.99,
     "shippingAddress": {
       "nom": "RABEMANALINA ",
-      "prenom": "Jean",
+      "prenom": "Jean Marie",
       "adresse": "21 rue de paris",
       "ville": "St Denis",
       "codePostal": "97400",
-      "pays": "France",
+      "pays": "La Réunion",
       "telephone": "0692198701"
     },
     "paymentMethod": "stripe",
-    "status": "confirmée",
-    "createdAt": "2025-05-02T09:24:55.669Z",
-    "updatedAt": "2025-05-02T09:24:55.669Z"
+    "status": "en préparation",
+    "createdAt": "2025-05-02T10:56:39.128Z",
+    "updatedAt": "2025-05-02T10:57:12.004Z"
   },
   {
-    "id": "ORD-1746178141665",
+    "id": "ORD-1746183420740",
     "userId": "3",
     "userName": "RABEMANALINA ",
     "userEmail": "vianey.jean@ymail.com",
     "items": [
       {
-        "productId": "3",
-        "name": "Caméra Sport HD",
-        "price": 149.99,
+        "productId": "5",
+        "name": "Chaussures de Course",
+        "price": 44.99,
         "quantity": 1,
-        "image": "/uploads/1745774122770.jpg",
-        "subtotal": 149.99
+        "image": "/uploads/images-1746178617306-780425094.jpg",
+        "subtotal": 44.99
       }
     ],
-    "totalAmount": 149.99,
+    "totalAmount": 44.99,
     "shippingAddress": {
       "nom": "RABEMANALINA ",
-      "prenom": "Jean",
+      "prenom": "Jean Marie",
       "adresse": "21 rue de paris",
       "ville": "St Denis",
       "codePostal": "97400",
@@ -55,8 +55,8 @@
       "telephone": "0692198701"
     },
     "paymentMethod": "paypal",
-    "status": "confirmée",
-    "createdAt": "2025-05-02T09:29:01.665Z",
-    "updatedAt": "2025-05-02T09:29:01.665Z"
+    "status": "livrée",
+    "createdAt": "2025-05-02T10:57:00.740Z",
+    "updatedAt": "2025-05-02T10:57:16.081Z"
   }
 ]
