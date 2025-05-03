@@ -1,4 +1,54 @@
-
 {
-  "conversations": {}
+  "conversations": {
+    "1-3": {
+      "messages": [
+        {
+          "id": "msg-1746295540983",
+          "senderId": "3",
+          "content": "😅",
+          "timestamp": "2025-05-03T18:05:40.983Z",
+          "read": false
+        },
+        {
+          "id": "msg-auto-1746295540983",
+          "senderId": "1",
+          "content": "Merci pour votre message. Je vais regarder ça dès que possible!",
+          "timestamp": "2025-05-03T18:05:40.983Z",
+          "read": false,
+          "isAutoReply": true
+        },
+        {
+          "id": "msg-1746295545720",
+          "senderId": "3",
+          "content": "cc",
+          "timestamp": "2025-05-03T18:05:45.720Z",
+          "read": false
+        },
+        {
+          "id": "msg-1746295570817",
+          "senderId": "1",
+          "content": "😱",
+          "timestamp": "2025-05-03T18:06:10.817Z",
+          "read": false
+        }
+      ],
+      "participants": [
+        "3",
+        "1"
+      ]
+    }
+  },
+  "onlineUsers": {
+    "1": {
+      "isOnline": true,
+      "lastSeen": "2025-05-03T18:07:13.878Z"
+    },
+    "3": {
+      "isOnline": false,
+      "lastSeen": "2025-05-03T18:06:22.310Z"
+    }
+  },
+  "autoReplySent": {
+    "1-3": "2025-05-03T18:05:40.983Z"
+  }
 }

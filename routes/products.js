@@ -26,6 +26,15 @@ const upload = multer({
 const productsFilePath = path.join(__dirname, '../data/products.json');
 const favoritesFilePath = path.join(__dirname, '../data/favorites.json');
 
+// Fonction pour normaliser les caractères (supprimer les accents)
+const normalizeString = (str) => {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+};
+
 // Middleware pour vérifier si le fichier existe
 const checkFileExists = (req, res, next) => {
   if (!fs.existsSync(productsFilePath)) {
@@ -58,7 +67,7 @@ router.get('/category/:categoryName', checkFileExists, (req, res) => {
   }
 });
 
-// Rechercher des produits
+// Rechercher des produits - Amélioration pour ignorer les accents
 router.get('/search', checkFileExists, (req, res) => {
   try {
     const { q } = req.query;
@@ -67,11 +76,19 @@ router.get('/search', checkFileExists, (req, res) => {
     }
     
     const products = JSON.parse(fs.readFileSync(productsFilePath));
-    const searchResults = products.filter(product => 
-      product.name.toLowerCase().includes(q.toLowerCase()) ||
-      product.description.toLowerCase().includes(q.toLowerCase()) ||
-      product.category.toLowerCase().includes(q.toLowerCase())
-    );
+    const normalizedQuery = normalizeString(q);
+    
+    const searchResults = products.filter(product => {
+      // Normaliser les champs de recherche
+      const normalizedName = normalizeString(product.name);
+      const normalizedDescription = normalizeString(product.description);
+      const normalizedCategory = normalizeString(product.category);
+      
+      // Vérifier si le terme de recherche normalisé est contenu dans les champs normalisés
+      return normalizedName.includes(normalizedQuery) ||
+             normalizedDescription.includes(normalizedQuery) ||
+             normalizedCategory.includes(normalizedQuery);
+    });
     
     res.json(searchResults);
   } catch (error) {
