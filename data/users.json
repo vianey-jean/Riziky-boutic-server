@@ -37,8 +37,16 @@
     "email": "bekotoj@yahoo.fr",
     "password": "admin123@",
     "role": "admin",
-    "dateCreation": "2025-04-26T10:00:00.000Z"
-  },{
+    "dateCreation": "2025-04-26T10:00:00.000Z",
+    "prenom": "Jean",
+    "adresse": "21 rue de paris",
+    "ville": "St Denis",
+    "codePostal": "97400",
+    "pays": "La Réunion",
+    "telephone": "0692010101",
+    "genre": "homme"
+  },
+  {
     "id": "4",
     "nom": "Service Client",
     "email": "service.client@example.com",
