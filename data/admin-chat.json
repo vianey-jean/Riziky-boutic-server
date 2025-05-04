@@ -1,47 +1,10 @@
+
 {
-  "conversations": {
-    "1-4": {
-      "messages": [],
-      "participants": [
-        "4",
-        "1"
-      ]
-    },
-    "3-4": {
-      "messages": [
-        {
-          "id": "msg-1746299195849",
-          "senderId": "4",
-          "content": "cc",
-          "timestamp": "2025-05-03T19:06:35.849Z",
-          "read": false
-        },
-        {
-          "id": "msg-1746299211465",
-          "senderId": "3",
-          "content": "bonsoir",
-          "timestamp": "2025-05-03T19:06:51.465Z",
-          "read": false
-        }
-      ],
-      "participants": [
-        "4",
-        "3"
-      ]
-    }
-  },
+  "conversations": {},
   "onlineUsers": {
-    "1": {
-      "isOnline": false,
-      "lastSeen": "2025-05-03T19:05:50.021Z"
-    },
-    "3": {
-      "isOnline": false,
-      "lastSeen": "2025-05-03T19:06:58.201Z"
-    },
     "4": {
-      "isOnline": false,
-      "lastSeen": "2025-05-03T19:07:11.682Z"
+      "isOnline": true,
+      "lastSeen": "2025-05-04T04:07:01.637Z"
     }
   },
   "autoReplySent": {}

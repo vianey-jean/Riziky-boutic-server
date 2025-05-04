@@ -1,0 +1,97 @@
+{
+  "conversations": {
+    "2-4": {
+      "messages": [
+        {
+          "id": "msg-1746331458538",
+          "senderId": "2",
+          "content": "bonjour",
+          "timestamp": "2025-05-04T04:04:18.538Z",
+          "read": true
+        },
+        {
+          "id": "msg-1746331576289",
+          "senderId": "2",
+          "content": "cc",
+          "timestamp": "2025-05-04T04:06:16.289Z",
+          "read": true
+        },
+        {
+          "id": "msg-1746343498751",
+          "senderId": "2",
+          "content": "bonjour",
+          "timestamp": "2025-05-04T07:24:58.751Z",
+          "read": true
+        },
+        {
+          "id": "msg-1746343871534",
+          "senderId": "2",
+          "content": "oui",
+          "timestamp": "2025-05-04T07:31:11.534Z",
+          "read": true
+        }
+      ],
+      "participants": [
+        "2",
+        "4"
+      ]
+    },
+    "4-4": {
+      "messages": [
+        {
+          "id": "msg-1746331519578",
+          "senderId": "4",
+          "content": "oui bonjour",
+          "timestamp": "2025-05-04T04:05:19.578Z",
+          "read": true
+        },
+        {
+          "id": "msg-1746331558567",
+          "senderId": "4",
+          "content": "😐",
+          "timestamp": "2025-05-04T04:05:58.567Z",
+          "read": true
+        },
+        {
+          "id": "msg-1746343555540",
+          "senderId": "4",
+          "content": "ok",
+          "timestamp": "2025-05-04T07:25:55.540Z",
+          "read": false
+        },
+        {
+          "id": "msg-1746343855235",
+          "senderId": "4",
+          "content": "cc",
+          "timestamp": "2025-05-04T07:30:55.235Z",
+          "read": false
+        },
+        {
+          "id": "msg-1746343860002",
+          "senderId": "4",
+          "content": "ca va",
+          "timestamp": "2025-05-04T07:31:00.002Z",
+          "read": false
+        },
+        {
+          "id": "msg-1746343881479",
+          "senderId": "4",
+          "content": "biensure",
+          "timestamp": "2025-05-04T07:31:21.479Z",
+          "read": false
+        }
+      ],
+      "participants": [
+        "4",
+        "4"
+      ]
+    }
+  },
+  "onlineUsers": {
+    "4": {
+      "isOnline": true,
+      "lastSeen": "2025-05-04T07:25:44.370Z"
+    }
+  },
+  "autoReplySent": {}
+}
