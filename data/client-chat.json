@@ -1,0 +1,83 @@
+{
+  "conversations": {
+    "client-2-service": {
+      "messages": [
+        {
+          "id": "msg-auto-1746367460561",
+          "senderId": "system",
+          "content": "Bienvenue dans notre service client en ligne. Un conseiller va vous répondre dans les plus brefs délais. Comment pouvons-nous vous aider?",
+          "timestamp": "2025-05-04T14:04:20.561Z",
+          "read": false,
+          "isSystemMessage": true
+        },
+        {
+          "id": "msg-1746367496754",
+          "senderId": "4",
+          "content": "Bonjour",
+          "timestamp": "2025-05-04T14:04:56.754Z",
+          "read": false,
+          "isAdminReply": true
+        },
+        {
+          "id": "msg-1746367514894",
+          "senderId": "2",
+          "content": "ça va",
+          "timestamp": "2025-05-04T14:05:14.894Z",
+          "read": false
+        },
+        {
+          "id": "msg-auto-1746367514895",
+          "senderId": "system",
+          "content": "Merci pour votre message. Actuellement, aucun conseiller n'est disponible. Nous vous répondrons dès que possible pendant nos heures d'ouverture (lun-ven 9h-18h).",
+          "timestamp": "2025-05-04T14:05:14.895Z",
+          "read": false,
+          "isSystemMessage": true
+        },
+        {
+          "id": "msg-1746367531850",
+          "senderId": "4",
+          "content": "oui et toi",
+          "timestamp": "2025-05-04T14:05:31.850Z",
+          "read": false,
+          "isAdminReply": true
+        },
+        {
+          "id": "msg-1746367545139",
+          "senderId": "2",
+          "content": "je vais bien merci",
+          "timestamp": "2025-05-04T14:05:45.139Z",
+          "read": false
+        },
+        {
+          "id": "msg-1746367580209",
+          "senderId": "4",
+          "content": "😝",
+          "timestamp": "2025-05-04T14:06:20.209Z",
+          "read": false,
+          "isAdminReply": true
+        }
+      ],
+      "participants": [
+        "2",
+        "1",
+        "3",
+        "4",
+        "4"
+      ],
+      "type": "service"
+    }
+  },
+  "onlineUsers": {
+    "2": {
+      "isOnline": false,
+      "lastSeen": "2025-05-04T14:06:48.078Z"
+    },
+    "4": {
+      "isOnline": true,
+      "lastSeen": "2025-05-04T14:04:49.611Z"
+    }
+  },
+  "autoReplySent": {
+    "client-2-service": "2025-05-04T14:05:14.895Z"
+  }
+}

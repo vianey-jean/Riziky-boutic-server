@@ -40,7 +40,8 @@ const dataFiles = [
   'favorites.json', 
   'contacts.json',
   'commandes.json',
-  'admin-chat.json'
+  'admin-chat.json',
+  'client-chat.json'
 ];
 
 dataFiles.forEach(file => {
@@ -49,7 +50,9 @@ dataFiles.forEach(file => {
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
   }
   if (!fs.existsSync(filePath)) {
-    const initialData = file === 'admin-chat.json' ? { conversations: {} } : [];
+    const initialData = file === 'admin-chat.json' || file === 'client-chat.json' 
+      ? { conversations: {}, onlineUsers: {}, autoReplySent: {} } 
+      : [];
     fs.writeFileSync(filePath, JSON.stringify(initialData, null, 2));
   }
 });
@@ -63,6 +66,7 @@ app.use('/api/contacts', require('./routes/contacts'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/admin-chat', require('./routes/admin-chat'));
+app.use('/api/client-chat', require('./routes/client-chat'));
 
 // Route pour les images uploadées
 app.use('/uploads', express.static('uploads'));
