@@ -1,158 +1,102 @@
-
 [
   {
-    "id": "1",
-    "name": "Écouteurs Sans Fil",
-    "description": "Écouteurs sans fil avec annulation de bruit ",
-    "price": 79.99,
-    "originalPrice": 79.99,
-    "promotion": null,
-    "promotionEnd": null,
-    "image": "/uploads/images-1746178401644-377182347.jpg",
-    "category": "Perruques",
-    "stock": 10,
-    "isSold": true,
-    "dateAjout": "2025-04-20T10:00:00.000Z",
-    "images": [
-      "/uploads/images-1746178401644-377182347.jpg"
-    ]
-  },
-  {
-    "id": "2",
-    "name": "Montre Connectée",
-    "description": "Montre connectée avec suivi de la santé \r\n",
-    "price": 87.75,
-    "originalPrice": 117,
-    "promotion": 25,
-    "promotionEnd": "2025-04-28T17:16:21.116Z",
-    "image": "/uploads/images-1746178466878-670798831.jpg",
-    "category": "Colle - Dissolvant",
-    "stock": 7,
-    "isSold": true,
-    "dateAjout": "2025-04-23T10:00:00.000Z",
-    "images": [
-      "/uploads/images-1746178466878-670798831.jpg"
-    ]
-  },
-  {
-    "id": "3",
-    "name": "Caméra Sport HD",
-    "description": "Caméra sport étanche avec vidéo 4K ",
-    "price": 149.99,
-    "originalPrice": 149.99,
-    "promotion": null,
-    "promotionEnd": null,
-    "image": "/uploads/images-1746178553296-265467827.jpg",
-    "category": "Perruques",
-    "stock": 10,
-    "isSold": true,
-    "dateAjout": "2025-04-25T10:00:00.000Z",
-    "images": [
-      "/uploads/images-1746178553296-265467827.jpg"
-    ]
-  },
-  {
-    "id": "4",
-    "name": "Sac à Dos de Randonnée",
-    "description": "Sac à dos imperméable avec multiples ",
-    "price": 59.99,
-    "originalPrice": 59.99,
-    "promotion": null,
-    "promotionEnd": null,
-    "image": "/uploads/images-1746178730769-156593522.jpg",
-    "category": "Peigne chauffante",
-    "stock": 10,
-    "isSold": true,
-    "dateAjout": "2025-04-22T10:00:00.000Z",
-    "images": [
-      "/uploads/images-1746178730769-156593522.jpg",
-      "/uploads/images-1746178730775-247221090.jpg",
-      "/uploads/images-1746178730782-247774381.jpg"
-    ]
-  },
-  {
-    "id": "5",
-    "name": "Chaussures de Course",
-    "description": "Chaussures avec semelle amortissante ",
-    "price": 44.99,
-    "originalPrice": 89.99,
-    "promotion": null,
-    "promotionEnd": null,
-    "image": "/uploads/images-1746178617306-780425094.jpg",
-    "category": "Queue de cheval",
-    "stock": 9,
-    "isSold": true,
-    "dateAjout": "2025-04-18T10:00:00.000Z",
-    "images": [
-      "/uploads/images-1746178617306-780425094.jpg"
-    ]
-  },
-  {
-    "id": "6",
-    "name": "Collier en Argent",
-    "description": "Collier en argent sterling avec pendentif",
-    "price": 41.39,
-    "originalPrice": 45.99,
-    "promotion": null,
-    "promotionEnd": null,
-    "image": "/uploads/images-1746178896141-219170716.jpg",
-    "category": "Tissages",
-    "stock": 10,
-    "isSold": true,
-    "dateAjout": "2025-04-15T10:00:00.000Z",
-    "images": [
-      "/uploads/images-1746178896141-219170716.jpg"
-    ]
-  },
-  {
-    "id": "7",
-    "name": "Enceinte Portable",
-    "description": "Enceinte Bluetooth étanche avec 24 heures ",
-    "price": 62.99,
-    "originalPrice": 69.99,
-    "promotion": null,
-    "promotionEnd": null,
-    "image": "/uploads/images-1746179016620-222342998.jpg",
-    "category": "Perruques",
-    "stock": 0,
-    "isSold": false,
-    "dateAjout": "2025-04-10T10:00:00.000Z",
-    "images": [
-      "/uploads/images-1746179016620-222342998.jpg"
-    ]
-  },
-  {
-    "id": "8",
-    "name": "Tablette 10 pouces",
-    "description": "Tablette tactile avec écran haute résolution ",
-    "price": 104.99,
-    "originalPrice": 104.99,
-    "promotion": null,
-    "promotionEnd": null,
-    "image": "/uploads/images-1746179069022-631439284.jpg",
-    "category": "Perruques",
-    "stock": 10,
-    "isSold": true,
-    "dateAjout": "2025-04-05T10:00:00.000Z",
-    "images": [
-      "/uploads/images-1746179069022-631439284.jpg"
-    ]
-  },
-  {
-    "id": "1746179217151",
-    "name": "Téléphone Jaune",
-    "description": "Téléphone fixe ancien, très bonne a utilisé",
-    "price": 99.99,
-    "originalPrice": 99.99,
+    "id": "1746726301725",
+    "name": "Perruque 💯cheveux naturelle, frange 14 pouces, couleur blonde miel",
+    "description": "👉: Perruque 💯 cheveux humain, frisé  très bouclé .\r\n👉: Frange et volumineux.\r\n👉: couleur Blonde miel  à 14 pouces.\r\n👉: d'une douceur et sans colle pour une  finition impeccable.  \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 100 € à négocier (MP)\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
+    "price": 100,
+    "originalPrice": 100,
     "category": "Perruques",
     "images": [
-      "/uploads/images-1746179217148-314861272.jpg"
+      "/uploads/images-1746726301703-934483229.jpg",
+      "/uploads/images-1746726301709-241921688.jpg",
+      "/uploads/images-1746726301717-789873254.jpg",
+      "/uploads/images-1746726301720-391191909.jpg"
     ],
-    "image": "/uploads/images-1746179217148-314861272.jpg",
+    "image": "/uploads/images-1746726301703-934483229.jpg",
     "promotion": null,
     "promotionEnd": null,
-    "stock": 6,
+    "stock": 1,
     "isSold": true,
-    "dateAjout": "2025-05-02T09:46:57.151Z"
+    "dateAjout": "2025-05-08T17:45:01.725Z"
+  },
+  {
+    "id": "1746726428072",
+    "name": "Perruque 💯naturelle, lace frontale, lisse 24 pouces",
+    "description": "👉: Perruque 💯 cheveux naturelle,  24 pouces.\r\n👉:  Qualité de 12A.\r\n👉:  Lisse , couleur blonde blanche, très volumineux.\r\n👉: Lace frontale 13x4,  avec transparent HD.\r\n👉: Cheveux très douce ,  une  finition impeccable.  \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 180€ sur MP.\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
+    "price": 180,
+    "originalPrice": 180,
+    "category": "Perruques",
+    "images": [
+      "/uploads/images-1746726428066-554695621.jpg",
+      "/uploads/images-1746726428067-875349884.jpg",
+      "/uploads/images-1746726428069-825378149.jpg",
+      "/uploads/images-1746726428070-250092560.jpg"
+    ],
+    "image": "/uploads/images-1746726428066-554695621.jpg",
+    "promotion": null,
+    "promotionEnd": null,
+    "stock": 1,
+    "isSold": true,
+    "dateAjout": "2025-05-08T17:47:08.072Z"
+  },
+  {
+    "id": "1746726531059",
+    "name": "4 Paquet Tissage 💯cheveux naturelle, 20 pouces",
+    "description": "👉: Paquet Tissage💯 cheveux naturelle.\r\n👉: Qualité 12A.\r\n👉: Cheveux bouclé, 100g le paquet.\r\n👉:  20 pouces\r\n👉: couleur Naturelle. \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 50€ le paquet (MP).\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
+    "price": 50,
+    "originalPrice": 50,
+    "category": "Tissages",
+    "images": [
+      "/uploads/images-1746726531053-828134332.jpg",
+      "/uploads/images-1746726531054-879354531.jpg",
+      "/uploads/images-1746726531056-99821469.jpg",
+      "/uploads/images-1746726531057-363519626.jpg"
+    ],
+    "image": "/uploads/images-1746726531053-828134332.jpg",
+    "promotion": null,
+    "promotionEnd": null,
+    "stock": 4,
+    "isSold": true,
+    "dateAjout": "2025-05-08T17:48:51.059Z"
+  },
+  {
+    "id": "1746760545081",
+    "name": "Perruque 💯cheveux naturelle, Frange, lisse 24 pouces",
+    "description": "👉: Perruque💯 cheveux naturelle  24 pouces, de haute qualité.\r\n👉:  Lisse, couleur naturelle, volumineux.\r\n👉: Jolie Frange.\r\n👉: d'une douceur ,  une  finition impeccable.  \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 150€  MP.\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
+    "price": 150,
+    "originalPrice": 150,
+    "category": "Perruques",
+    "images": [
+      "/uploads/images-1746760545078-10244164.jpg",
+      "/uploads/images-1746760545079-332609539.jpg",
+      "/uploads/images-1746760545079-363394981.jpg",
+      "/uploads/images-1746760545079-149690054.jpg"
+    ],
+    "image": "/uploads/images-1746760545078-10244164.jpg",
+    "promotion": null,
+    "promotionEnd": null,
+    "stock": 1,
+    "isSold": true,
+    "dateAjout": "2025-05-09T03:15:45.081Z"
+  },
+  {
+    "id": "1746760831010",
+    "name": "Perruque 💯 cheveux humain , bouclé coloré, 16 pouces",
+    "description": "👉: Perruque 💯 cheveux humain,  bouclés.\r\n👉: Frange, 250 densité, très volumineux, 16 pouces.\r\n👉: couleur noir un peux marron\r\n👉: d'une douceur et sans colle pour une  finition impeccable.  \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 80€  à débattre. (MP)\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
+    "price": 150,
+    "originalPrice": 150,
+    "category": "Perruques",
+    "images": [
+      "/uploads/images-1746760831007-189769899.jpg",
+      "/uploads/images-1746760831007-981902352.jpg",
+      "/uploads/images-1746760831008-894695185.jpg",
+      "/uploads/images-1746760831008-381892621.jpg"
+    ],
+    "image": "/uploads/images-1746760831007-189769899.jpg",
+    "promotion": null,
+    "promotionEnd": null,
+    "stock": 1,
+    "isSold": true,
+    "dateAjout": "2025-05-09T03:20:31.010Z"
   }
 ]

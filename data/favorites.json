@@ -1,42 +1,12 @@
 [
   {
-    "id": "fav1",
-    "userId": "2",
-    "productId": "1"
-  },
-  {
-    "id": "fav2",
-    "userId": "1",
-    "productId": "1"
-  },
-  {
-    "id": "fav3",
-    "userId": "2",
-    "productId": "2"
-  },
-  {
-    "id": "fav4",
-    "userId": "1",
-    "productId": "3"
-  },
-  {
-    "id": "fav5",
-    "userId": "2",
-    "productId": "3"
-  },
-  {
-    "id": "fav6",
-    "userId": "1",
-    "productId": "2"
-  },
-  {
-    "id": "fav7",
-    "userId": "2",
-    "productId": "5"
-  },
-  {
-    "id": "fav-1746106913346",
+    "id": "fav-1746759829487",
     "userId": "3",
-    "productId": "1"
+    "productId": "1746726428072"
+  },
+  {
+    "id": "fav-1746760592658",
+    "userId": "3",
+    "productId": "1746726531059"
   }
 ]
