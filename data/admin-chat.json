@@ -22,20 +22,6 @@
           "content": "bonsoir",
           "timestamp": "2025-05-03T19:06:51.465Z",
           "read": false
-        },
-        {
-          "id": "msg-1746963325848",
-          "senderId": "3",
-          "content": "oui",
-          "timestamp": "2025-05-11T11:35:25.848Z",
-          "read": false
-        },
-        {
-          "id": "msg-1746981694582",
-          "senderId": "3",
-          "content": "cc",
-          "timestamp": "2025-05-11T16:41:34.582Z",
-          "read": false
         }
       ],
       "participants": [
@@ -50,12 +36,12 @@
       "lastSeen": "2025-05-03T19:05:50.021Z"
     },
     "3": {
-      "isOnline": true,
-      "lastSeen": "2025-05-11T16:42:14.470Z"
+      "isOnline": false,
+      "lastSeen": "2025-05-03T19:06:58.201Z"
     },
     "4": {
-      "isOnline": true,
-      "lastSeen": "2025-05-11T16:42:07.002Z"
+      "isOnline": false,
+      "lastSeen": "2025-05-03T19:07:11.682Z"
     }
   },
   "autoReplySent": {}
