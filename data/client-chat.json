@@ -2,5 +2,6 @@
 {
   "conversations": {},
   "onlineUsers": {},
-  "autoReplySent": {}
+  "autoReplySent": {},
+  "activeCalls": {}
 }
