@@ -31,5 +31,22 @@
     "comment": "Le perruque est très bien, le cheveu est de bonne qualité. la livraison est très rapide. Merci le vendeur",
     "createdAt": "2025-05-17T17:56:40.690Z",
     "updatedAt": "2025-05-17T17:56:40.690Z"
+  },
+  {
+    "id": "1747510282221",
+    "userId": "3",
+    "userName": "Jean Marie RABEMANALINA",
+    "productId": "1746760545081",
+    "productRating": 5,
+    "deliveryRating": 5,
+    "comment": "Le perruque est meilleur et les cheveux sont de bonne qualité. La livraison est très rapide.",
+    "photos": [
+      "/uploads/review-photos/review-photo-1747510282205-171939332.jpg",
+      "/uploads/review-photos/review-photo-1747510282212-44242009.jpg",
+      "/uploads/review-photos/review-photo-1747510282215-65782692.jpg",
+      "/uploads/review-photos/review-photo-1747510282217-829686858.jpg"
+    ],
+    "createdAt": "2025-05-17T19:31:22.221Z",
+    "updatedAt": "2025-05-17T19:31:22.221Z"
   }
 ]
