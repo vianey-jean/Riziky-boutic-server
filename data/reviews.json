@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "userId": "1",
+    "userName": "John Doe",
+    "productId": "1746726301725",
+    "productRating": 4,
+    "deliveryRating": 5,
+    "comment": "Belle perruque, j'adore la texture et la couleur. La livraison était très rapide!",
+    "createdAt": "2025-05-10T10:00:00.000Z",
+    "updatedAt": "2025-05-10T10:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "userId": "2",
+    "userName": "Jane Smith",
+    "productId": "1746726301725",
+    "productRating": 5,
+    "deliveryRating": 4,
+    "comment": "Très satisfaite de mon achat. La perruque est de très bonne qualité et tient parfaitement.",
+    "createdAt": "2025-05-11T15:30:00.000Z",
+    "updatedAt": "2025-05-11T15:30:00.000Z"
+  },
+  {
+    "id": "1747504600690",
+    "userId": "3",
+    "userName": "Jean Marie RABEMANALINA",
+    "productId": "1746726428072",
+    "productRating": 5,
+    "deliveryRating": 5,
+    "comment": "Le perruque est très bien, le cheveu est de bonne qualité. la livraison est très rapide. Merci le vendeur",
+    "createdAt": "2025-05-17T17:56:40.690Z",
+    "updatedAt": "2025-05-17T17:56:40.690Z"
+  }
+]

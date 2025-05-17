@@ -1,3 +1,32 @@
 [
- 
+  {
+    "id": "ORD-1747507193174",
+    "userId": "3",
+    "userName": "RABEMANALINA ",
+    "userEmail": "vianey.jean@ymail.com",
+    "items": [
+      {
+        "productId": "1746726531059",
+        "name": "4 Paquet Tissage 💯cheveux naturelle, 20 pouces",
+        "price": 50,
+        "quantity": 1,
+        "image": "/uploads/images-1746726531053-828134332.jpg",
+        "subtotal": 50
+      }
+    ],
+    "totalAmount": 50,
+    "shippingAddress": {
+      "nom": "RABEMANALINA ",
+      "prenom": "Jean Marie",
+      "adresse": "21 rue de paris",
+      "ville": "Saint-Denis",
+      "codePostal": "97400",
+      "pays": "La Réunion",
+      "telephone": "0692198701"
+    },
+    "paymentMethod": "stripe",
+    "status": "en préparation",
+    "createdAt": "2025-05-17T18:39:53.174Z",
+    "updatedAt": "2025-05-17T18:40:17.789Z"
+  }
 ]
