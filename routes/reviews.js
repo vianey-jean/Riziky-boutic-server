@@ -46,6 +46,50 @@ const checkFileExists = (req, res, next) => {
   next();
 };
 
+// Récupérer tous les commentaires
+router.get('/', checkFileExists, (req, res) => {
+  try {
+    const reviews = JSON.parse(fs.readFileSync(reviewsFilePath));
+    res.json(reviews);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des commentaires:', error);
+    res.status(500).json({ message: 'Erreur lors de la récupération des commentaires' });
+  }
+});
+
+// Récupérer les meilleurs commentaires (note élevée)
+router.get('/best', checkFileExists, (req, res) => {
+  try {
+    const reviews = JSON.parse(fs.readFileSync(reviewsFilePath));
+    
+    // Trier les commentaires par note moyenne décroissante, puis par date
+    const sortedReviews = [...reviews].sort((a, b) => {
+      // Calculer la note moyenne pour chaque commentaire
+      const avgRatingA = (a.productRating + a.deliveryRating) / 2;
+      const avgRatingB = (b.productRating + b.deliveryRating) / 2;
+      
+      // D'abord par note
+      if (avgRatingB !== avgRatingA) {
+        return avgRatingB - avgRatingA;
+      }
+      
+      // Ensuite par date (les plus récents d'abord)
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+    
+    // Filtrer pour n'avoir que des commentaires avec du texte
+    const filteredReviews = sortedReviews.filter(review => review.comment && review.comment.trim() !== '');
+    
+    // Prendre les 3 meilleurs
+    const bestReviews = filteredReviews.slice(0, 3);
+    
+    res.json(bestReviews);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des meilleurs commentaires:', error);
+    res.status(500).json({ message: 'Erreur lors de la récupération des meilleurs commentaires' });
+  }
+});
+
 // Récupérer tous les commentaires d'un produit
 router.get('/product/:productId', checkFileExists, (req, res) => {
   try {
