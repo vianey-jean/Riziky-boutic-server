@@ -4,13 +4,15 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const { isAuthenticated } = require('../middlewares/auth');
 const secretKey = 'your_jwt_secret'; // Devrais être dans une variable d'environnement
 
 const usersFilePath = path.join(__dirname, '../data/users.json');
+const saltRounds = 10; // Nombre de rounds pour le hashage bcrypt
 
 // Login
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     
@@ -19,9 +21,32 @@ router.post('/login', (req, res) => {
     }
     
     const users = JSON.parse(fs.readFileSync(usersFilePath));
-    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
     
     if (!user) {
+      return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+    }
+    
+    // Vérification du mot de passe avec bcrypt
+    let isPasswordValid;
+    
+    if (user.password.startsWith('$2')) {
+      // Le mot de passe est déjà hashé avec bcrypt
+      isPasswordValid = await bcrypt.compare(password, user.password);
+    } else {
+      // Mot de passe en clair (pour rétrocompatibilité)
+      isPasswordValid = (user.password === password);
+      
+      // Mise à jour du mot de passe avec hashage si correct
+      if (isPasswordValid) {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const userIndex = users.findIndex(u => u.id === user.id);
+        users[userIndex].password = hashedPassword;
+        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+      }
+    }
+    
+    if (!isPasswordValid) {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
     }
     
@@ -41,7 +66,7 @@ router.post('/login', (req, res) => {
 });
 
 // Register
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const { nom, email, password } = req.body;
     
@@ -55,11 +80,14 @@ router.post('/register', (req, res) => {
       return res.status(400).json({ message: 'Cet email est déjà utilisé' });
     }
     
+    // Hashage du mot de passe
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    
     const newUser = {
       id: String(Date.now()),
       nom,
       email,
-      password,
+      password: hashedPassword, // Mot de passe hashé
       role: 'client',
       dateCreation: new Date().toISOString()
     };
@@ -145,7 +173,7 @@ router.get('/user-temp-password', (req, res) => {
 });
 
 // Verify temporary password
-router.post('/verify-temp-password', (req, res) => {
+router.post('/verify-temp-password', async (req, res) => {
   try {
     const { email, tempPassword } = req.body;
     
@@ -160,7 +188,15 @@ router.post('/verify-temp-password', (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
     
-    const isValid = user.passwordUnique === tempPassword;
+    let isValid = false;
+    
+    if (user.passwordUnique && user.passwordUnique.startsWith('$2')) {
+      // Si le code temporaire est déjà hashé
+      isValid = await bcrypt.compare(tempPassword, user.passwordUnique);
+    } else {
+      // Pour la rétrocompatibilité avec les codes non hashés
+      isValid = (user.passwordUnique === tempPassword);
+    }
     
     res.json({ valid: isValid });
   } catch (error) {
@@ -170,7 +206,7 @@ router.post('/verify-temp-password', (req, res) => {
 });
 
 // Reset password with temporary password
-router.post('/reset-password', (req, res) => {
+router.post('/reset-password', async (req, res) => {
   try {
     const { email, passwordUnique, newPassword } = req.body;
     
@@ -185,12 +221,24 @@ router.post('/reset-password', (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
     
-    if (users[userIndex].passwordUnique !== passwordUnique) {
+    let isCodeValid = false;
+    if (users[userIndex].passwordUnique.startsWith('$2')) {
+      // Si le code est hashé
+      isCodeValid = await bcrypt.compare(passwordUnique, users[userIndex].passwordUnique);
+    } else {
+      // Pour la rétrocompatibilité
+      isCodeValid = (users[userIndex].passwordUnique === passwordUnique);
+    }
+    
+    if (!isCodeValid) {
       return res.status(401).json({ message: 'Code temporaire invalide' });
     }
     
+    // Hasher le nouveau mot de passe
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    
     // Mettre à jour le mot de passe et réinitialiser le passwordUnique
-    users[userIndex].password = newPassword;
+    users[userIndex].password = hashedPassword;
     users[userIndex].passwordUnique = "";
     
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
@@ -203,7 +251,7 @@ router.post('/reset-password', (req, res) => {
 });
 
 // Forgot password endpoint
-router.post('/forgot-password', (req, res) => {
+router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
     
