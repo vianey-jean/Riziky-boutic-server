@@ -5,37 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const { isAuthenticated, isAdmin } = require('../middlewares/auth');
-const sanitizeHtml = require('sanitize-html');
-const rateLimit = require('express-rate-limit');
 
-// Rate limiting pour éviter les attaques par force brute
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // 100 requêtes par IP
-  message: { message: 'Trop de requêtes, veuillez réessayer plus tard' },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// Protection contre l'exploration des répertoires
-const securePath = (userPath) => {
-  const normalized = path.normalize(userPath).replace(/^(\.\.(\/|\\|$))+/, '');
-  return path.join(__dirname, '..', normalized);
-};
-
-// Fonction pour nettoyer les entrées de l'utilisateur
-const sanitizeInput = (input) => {
-  if (typeof input === 'string') {
-    return sanitizeHtml(input, {
-      allowedTags: [], 
-      allowedAttributes: {},
-      disallowedTagsMode: 'recursiveEscape'
-    });
-  }
-  return input;
-};
-
-// Configuration pour l'upload d'images avec vérification du type et taille
+// Configuration pour l'upload d'images
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
@@ -47,18 +18,9 @@ const storage = multer.diskStorage({
   }
 });
 
-const fileFilter = (req, file, cb) => {
-  // Accept images only
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return cb(new Error('Seuls les fichiers image sont autorisés!'), false);
-  }
-  cb(null, true);
-};
-
 const upload = multer({ 
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5MB
-  fileFilter: fileFilter
+  limits: { fileSize: 5 * 1024 * 1024 } // Limite de 5MB
 });
 
 const productsFilePath = path.join(__dirname, '../data/products.json');
@@ -81,41 +43,8 @@ const checkFileExists = (req, res, next) => {
   next();
 };
 
-// Middleware pour vérifier et mettre à jour les promotions expirées
-const checkExpiredPromotions = (req, res, next) => {
-  try {
-    if (!fs.existsSync(productsFilePath)) return next();
-    
-    const products = JSON.parse(fs.readFileSync(productsFilePath));
-    const now = new Date();
-    let hasChanges = false;
-    
-    products.forEach(product => {
-      if (product.promotion && product.promotionEnd && new Date(product.promotionEnd) < now) {
-        // Réinitialiser la promotion
-        product.price = product.originalPrice || product.price;
-        product.promotion = null;
-        product.promotionEnd = null;
-        hasChanges = true;
-      }
-    });
-    
-    if (hasChanges) {
-      fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2));
-    }
-    
-    next();
-  } catch (error) {
-    console.error("Erreur lors de la vérification des promotions expirées:", error);
-    next();
-  }
-};
-
-// Appliquer le middleware de vérification des promotions à toutes les routes
-router.use(checkExpiredPromotions);
-
-// Obtenir tous les produits avec protection rate limit
-router.get('/', apiLimiter, checkFileExists, (req, res) => {
+// Obtenir tous les produits
+router.get('/', checkFileExists, (req, res) => {
   try {
     const products = JSON.parse(fs.readFileSync(productsFilePath));
     res.json(products);
@@ -125,14 +54,12 @@ router.get('/', apiLimiter, checkFileExists, (req, res) => {
 });
 
 // Obtenir les produits par catégorie
-router.get('/category/:categoryName', apiLimiter, checkFileExists, (req, res) => {
+router.get('/category/:categoryName', checkFileExists, (req, res) => {
   try {
     const { categoryName } = req.params;
-    const sanitizedCategory = sanitizeInput(categoryName);
-    
     const products = JSON.parse(fs.readFileSync(productsFilePath));
     const filteredProducts = products.filter(
-      product => normalizeString(product.category) === normalizeString(sanitizedCategory)
+      product => product.category.toLowerCase() === categoryName.toLowerCase()
     );
     res.json(filteredProducts);
   } catch (error) {
@@ -141,17 +68,15 @@ router.get('/category/:categoryName', apiLimiter, checkFileExists, (req, res) =>
 });
 
 // Rechercher des produits - Amélioration pour ignorer les accents
-router.get('/search', apiLimiter, checkFileExists, (req, res) => {
+router.get('/search', checkFileExists, (req, res) => {
   try {
     const { q } = req.query;
-    const sanitizedQuery = sanitizeInput(q);
-    
-    if (!sanitizedQuery || sanitizedQuery.length < 3) {
+    if (!q || q.length < 3) {
       return res.json([]);
     }
     
     const products = JSON.parse(fs.readFileSync(productsFilePath));
-    const normalizedQuery = normalizeString(sanitizedQuery);
+    const normalizedQuery = normalizeString(q);
     
     const searchResults = products.filter(product => {
       // Normaliser les champs de recherche
@@ -172,7 +97,7 @@ router.get('/search', apiLimiter, checkFileExists, (req, res) => {
 });
 
 // Obtenir les produits les plus favorisés
-router.get('/stats/most-favorited', apiLimiter, checkFileExists, (req, res) => {
+router.get('/stats/most-favorited', checkFileExists, (req, res) => {
   try {
     if (!fs.existsSync(favoritesFilePath)) {
       return res.json([]);
@@ -204,7 +129,7 @@ router.get('/stats/most-favorited', apiLimiter, checkFileExists, (req, res) => {
 });
 
 // Obtenir les nouveaux produits
-router.get('/stats/new-arrivals', apiLimiter, checkFileExists, (req, res) => {
+router.get('/stats/new-arrivals', checkFileExists, (req, res) => {
   try {
     const products = JSON.parse(fs.readFileSync(productsFilePath));
     
@@ -224,11 +149,10 @@ router.get('/stats/new-arrivals', apiLimiter, checkFileExists, (req, res) => {
 });
 
 // Obtenir un produit par ID
-router.get('/:id', apiLimiter, checkFileExists, (req, res) => {
+router.get('/:id', checkFileExists, (req, res) => {
   try {
-    const sanitizedId = sanitizeInput(req.params.id);
     const products = JSON.parse(fs.readFileSync(productsFilePath));
-    const product = products.find(p => p.id === sanitizedId);
+    const product = products.find(p => p.id === req.params.id);
     
     if (!product) {
       return res.status(404).json({ message: 'Produit non trouvé' });
@@ -243,15 +167,6 @@ router.get('/:id', apiLimiter, checkFileExists, (req, res) => {
 // Créer un nouveau produit (admin seulement)
 router.post('/', isAuthenticated, isAdmin, upload.array('images', 4), checkFileExists, (req, res) => {
   try {
-    // Sanitisation des entrées utilisateur
-    const name = sanitizeInput(req.body.name || '');
-    const description = sanitizeInput(req.body.description || '');
-    const price = parseFloat(req.body.price) || 0;
-    const category = sanitizeInput(req.body.category || '');
-    const stock = parseInt(req.body.stock) || 0;
-    const promotion = req.body.promotion ? parseInt(req.body.promotion) : null;
-    const promotionEnd = req.body.promotionEnd || null;
-    
     const products = JSON.parse(fs.readFileSync(productsFilePath));
     
     const images = req.files && req.files.length > 0 
@@ -260,32 +175,25 @@ router.post('/', isAuthenticated, isAdmin, upload.array('images', 4), checkFileE
     
     const newProduct = {
       id: Date.now().toString(),
-      name,
-      description,
-      price,
-      originalPrice: price,
-      category,
-      images,
+      name: req.body.name,
+      description: req.body.description,
+      price: parseFloat(req.body.price),
+      originalPrice: parseFloat(req.body.price),
+      category: req.body.category,
+      images: images,
       image: images[0], // For backwards compatibility
-      promotion,
-      promotionEnd,
-      stock,
-      isSold: stock > 0,
+      promotion: req.body.promotion ? parseInt(req.body.promotion) : null,
+      promotionEnd: req.body.promotionEnd || null,
+      stock: parseInt(req.body.stock) || 0,
+      isSold: (parseInt(req.body.stock) || 0) > 0,
       dateAjout: new Date().toISOString(),
     };
-    
-    // Si une promotion est appliquée, calculer le prix promotionnel
-    if (promotion) {
-      const discountFactor = 1 - (promotion / 100);
-      newProduct.price = +(price * discountFactor).toFixed(2);
-    }
     
     products.push(newProduct);
     fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2));
     
     res.status(201).json(newProduct);
   } catch (error) {
-    console.error('Erreur lors de la création du produit:', error);
     res.status(500).json({ message: 'Erreur lors de la création du produit' });
   }
 });
@@ -293,24 +201,12 @@ router.post('/', isAuthenticated, isAdmin, upload.array('images', 4), checkFileE
 // Mettre à jour un produit (admin seulement)
 router.put('/:id', isAuthenticated, isAdmin, upload.array('images', 4), checkFileExists, (req, res) => {
   try {
-    const sanitizedId = sanitizeInput(req.params.id);
     const products = JSON.parse(fs.readFileSync(productsFilePath));
-    const index = products.findIndex(p => p.id === sanitizedId);
+    const index = products.findIndex(p => p.id === req.params.id);
     
     if (index === -1) {
       return res.status(404).json({ message: 'Produit non trouvé' });
     }
-    
-    // Sanitisation des entrées utilisateur
-    const name = sanitizeInput(req.body.name) || products[index].name;
-    const description = sanitizeInput(req.body.description) || products[index].description;
-    const category = sanitizeInput(req.body.category) || products[index].category;
-    const price = req.body.price ? parseFloat(req.body.price) : products[index].price;
-    const originalPrice = req.body.originalPrice ? parseFloat(req.body.originalPrice) : (products[index].originalPrice || price);
-    const promotion = req.body.promotion !== undefined ? parseInt(req.body.promotion) : products[index].promotion;
-    const promotionEnd = req.body.promotionEnd || products[index].promotionEnd;
-    const stock = req.body.stock !== undefined ? parseInt(req.body.stock) : products[index].stock;
-    const isSold = req.body.isSold !== undefined ? req.body.isSold === 'true' : products[index].isSold;
     
     // Préserver les images existantes si aucune nouvelle n'est envoyée
     let images = products[index].images || [products[index].image];
@@ -331,16 +227,15 @@ router.put('/:id', isAuthenticated, isAdmin, upload.array('images', 4), checkFil
     
     const updatedProduct = {
       ...products[index],
-      name,
-      description,
-      price,
-      originalPrice,
-      category,
-      promotion,
-      promotionEnd,
-      stock,
-      isSold,
-      images,
+      name: req.body.name || products[index].name,
+      description: req.body.description || products[index].description,
+      price: req.body.price ? parseFloat(req.body.price) : products[index].price,
+      category: req.body.category || products[index].category,
+      promotion: req.body.promotion !== undefined ? parseInt(req.body.promotion) : products[index].promotion,
+      promotionEnd: req.body.promotionEnd || products[index].promotionEnd,
+      stock: req.body.stock !== undefined ? parseInt(req.body.stock) : products[index].stock,
+      isSold: req.body.isSold !== undefined ? req.body.isSold === 'true' : products[index].isSold,
+      images: images,
       image: images[0], // Pour la compatibilité avec le code existant
     };
     
@@ -357,10 +252,9 @@ router.put('/:id', isAuthenticated, isAdmin, upload.array('images', 4), checkFil
 // Supprimer un produit (admin seulement)
 router.delete('/:id', isAuthenticated, isAdmin, checkFileExists, (req, res) => {
   try {
-    const sanitizedId = sanitizeInput(req.params.id);
     const products = JSON.parse(fs.readFileSync(productsFilePath));
     const initialLength = products.length;
-    const filteredProducts = products.filter(p => p.id !== sanitizedId);
+    const filteredProducts = products.filter(p => p.id !== req.params.id);
     
     if (filteredProducts.length === initialLength) {
       return res.status(404).json({ message: 'Produit non trouvé' });
@@ -376,15 +270,13 @@ router.delete('/:id', isAuthenticated, isAdmin, checkFileExists, (req, res) => {
 // Appliquer une promotion à un produit (admin seulement)
 router.post('/:id/promotion', isAuthenticated, isAdmin, checkFileExists, (req, res) => {
   try {
-    const sanitizedId = sanitizeInput(req.params.id);
     const { promotion, duration } = req.body;
-    
     if (promotion === undefined || !duration) {
       return res.status(400).json({ message: 'Promotion et durée requises' });
     }
     
     const products = JSON.parse(fs.readFileSync(productsFilePath));
-    const index = products.findIndex(p => p.id === sanitizedId);
+    const index = products.findIndex(p => p.id === req.params.id);
     
     if (index === -1) {
       return res.status(404).json({ message: 'Produit non trouvé' });
@@ -414,24 +306,6 @@ router.post('/:id/promotion', isAuthenticated, isAdmin, checkFileExists, (req, r
     res.json(products[index]);
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de l\'application de la promotion' });
-  }
-});
-
-// Obtenir les produits en promotion
-router.get('/stats/promotions', apiLimiter, checkFileExists, (req, res) => {
-  try {
-    const products = JSON.parse(fs.readFileSync(productsFilePath));
-    const now = new Date();
-    
-    const promotionProducts = products.filter(product => 
-      product.promotion && 
-      product.promotionEnd && 
-      new Date(product.promotionEnd) > now
-    );
-    
-    res.json(promotionProducts);
-  } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de la récupération des produits en promotion' });
   }
 });
 
