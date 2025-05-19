@@ -30,6 +30,7 @@ const corsOptions = {
       'http://localhost:8080', 
       'http://localhost:5173',
       'http://localhost:3000',
+      'https://riziky-boutic.vercel.app',
       'https://riziky-boutic.onrender.com',
       'https://riziky-boutic-server.onrender.com'
     ];
