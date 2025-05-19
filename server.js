@@ -17,7 +17,10 @@ const app = express();
 const server = createServer(app);
 
 // Middleware de sécurité
-app.use(helmet({ contentSecurityPolicy: false })); // Headers de sécurité
+app.use(helmet({ 
+  contentSecurityPolicy: false,
+  crossOriginResourcePolicy: { policy: 'cross-origin' } // Activer le partage de ressources cross-origin
+})); // Headers de sécurité
 app.use(xssClean()); // Protéger contre les attaques XSS
 
 // Configuration de CORS avec options avancées
@@ -25,8 +28,10 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       'http://localhost:8080', 
-      'http://localhost:5173', 
-      'https://riziky-boutic.onrender.com'
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://riziky-boutic.onrender.com',
+      'https://riziky-boutic-server.onrender.com'
     ];
     
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
@@ -43,6 +48,15 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Middleware additionnels pour les en-têtes CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+  res.header('Cross-Origin-Embedder-Policy', 'credentialless');
+  res.header('Cross-Origin-Opener-Policy', 'same-origin');
+  next();
+});
 
 // Middleware pour parser le corps des requêtes
 app.use(bodyParser.json());
@@ -79,8 +93,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware pour servir les fichiers statiques
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Middleware pour servir les fichiers statiques avec des en-têtes CORS appropriés
+app.use('/uploads', (req, res, next) => {
+  res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+  express.static(path.join(__dirname, 'uploads'))(req, res, next);
+});
 
 // Middleware d'authentification global
 const authenticateToken = (req, res, next) => {
