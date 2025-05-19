@@ -63,7 +63,7 @@
     "id": "1746760545081",
     "name": "Perruque 💯cheveux naturelle, Frange, lisse 24 pouces",
     "description": "👉: Perruque💯 cheveux naturelle  24 pouces, de haute qualité.\r\n👉:  Lisse, couleur naturelle, volumineux.\r\n👉: Jolie Frange.\r\n👉: d'une douceur ,  une  finition impeccable.  \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 150€  MP.\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
-    "price": 150,
+    "price": 105,
     "originalPrice": 150,
     "category": "Perruques",
     "images": [
@@ -73,8 +73,8 @@
       "/uploads/images-1746760545079-149690054.jpg"
     ],
     "image": "/uploads/images-1746760545078-10244164.jpg",
-    "promotion": null,
-    "promotionEnd": null,
+    "promotion": 30,
+    "promotionEnd": "2025-05-20T12:17:29.331Z",
     "stock": 1,
     "isSold": true,
     "dateAjout": "2025-05-09T03:15:45.081Z"
