@@ -50,7 +50,7 @@
     "id": "4",
     "nom": "Service Client",
     "email": "service.client@example.com",
-    "password": "Service123@",
+    "password": "$2b$10$nzcvstehH8wpRt.lp7vAe.664TrgMe8m2wZGfAQeMvTQibAGpUezG",
     "role": "admin",
     "dateCreation": "2025-04-26T10:00:00.000Z"
   }
