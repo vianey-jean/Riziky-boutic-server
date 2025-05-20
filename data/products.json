@@ -3,7 +3,7 @@
     "id": "1746726301725",
     "name": "Perruque 💯cheveux naturelle, frange 14 pouces, couleur blonde miel",
     "description": "👉: Perruque 💯 cheveux humain, frisé  très bouclé .\r\n👉: Frange et volumineux.\r\n👉: couleur Blonde miel  à 14 pouces.\r\n👉: d'une douceur et sans colle pour une  finition impeccable.  \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 100 € à négocier (MP)\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
-    "price": 100,
+    "price": 90,
     "originalPrice": 100,
     "category": "Perruques",
     "images": [
@@ -13,8 +13,8 @@
       "/uploads/images-1746726301720-391191909.jpg"
     ],
     "image": "/uploads/images-1746726301703-934483229.jpg",
-    "promotion": null,
-    "promotionEnd": null,
+    "promotion": 10,
+    "promotionEnd": "2025-10-17T14:53:54.943Z",
     "stock": 1,
     "isSold": true,
     "dateAjout": "2025-05-08T17:45:01.725Z"
@@ -23,7 +23,7 @@
     "id": "1746726428072",
     "name": "Perruque 💯naturelle, lace frontale, lisse 24 pouces",
     "description": "👉: Perruque 💯 cheveux naturelle,  24 pouces.\r\n👉:  Qualité de 12A.\r\n👉:  Lisse , couleur blonde blanche, très volumineux.\r\n👉: Lace frontale 13x4,  avec transparent HD.\r\n👉: Cheveux très douce ,  une  finition impeccable.  \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 180€ sur MP.\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
-    "price": 180,
+    "price": 144,
     "originalPrice": 180,
     "category": "Perruques",
     "images": [
@@ -33,8 +33,8 @@
       "/uploads/images-1746726428070-250092560.jpg"
     ],
     "image": "/uploads/images-1746726428066-554695621.jpg",
-    "promotion": null,
-    "promotionEnd": null,
+    "promotion": 20,
+    "promotionEnd": "2025-10-17T14:54:08.221Z",
     "stock": 1,
     "isSold": true,
     "dateAjout": "2025-05-08T17:47:08.072Z"
@@ -63,7 +63,7 @@
     "id": "1746760545081",
     "name": "Perruque 💯cheveux naturelle, Frange, lisse 24 pouces",
     "description": "👉: Perruque💯 cheveux naturelle  24 pouces, de haute qualité.\r\n👉:  Lisse, couleur naturelle, volumineux.\r\n👉: Jolie Frange.\r\n👉: d'une douceur ,  une  finition impeccable.  \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 150€  MP.\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
-    "price": 105,
+    "price": 75,
     "originalPrice": 150,
     "category": "Perruques",
     "images": [
@@ -73,8 +73,8 @@
       "/uploads/images-1746760545079-149690054.jpg"
     ],
     "image": "/uploads/images-1746760545078-10244164.jpg",
-    "promotion": 30,
-    "promotionEnd": "2025-05-20T12:17:29.331Z",
+    "promotion": 50,
+    "promotionEnd": "2025-10-17T14:53:18.793Z",
     "stock": 1,
     "isSold": true,
     "dateAjout": "2025-05-09T03:15:45.081Z"
@@ -83,7 +83,7 @@
     "id": "1746760831010",
     "name": "Perruque 💯 cheveux humain , bouclé coloré, 16 pouces",
     "description": "👉: Perruque 💯 cheveux humain,  bouclés.\r\n👉: Frange, 250 densité, très volumineux, 16 pouces.\r\n👉: couleur noir un peux marron\r\n👉: d'une douceur et sans colle pour une  finition impeccable.  \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 80€  à débattre. (MP)\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
-    "price": 150,
+    "price": 112.5,
     "originalPrice": 150,
     "category": "Perruques",
     "images": [
@@ -93,8 +93,8 @@
       "/uploads/images-1746760831008-381892621.jpg"
     ],
     "image": "/uploads/images-1746760831007-189769899.jpg",
-    "promotion": null,
-    "promotionEnd": null,
+    "promotion": 25,
+    "promotionEnd": "2025-10-17T14:54:30.773Z",
     "stock": 1,
     "isSold": true,
     "dateAjout": "2025-05-09T03:20:31.010Z"
