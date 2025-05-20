@@ -189,12 +189,14 @@ const io = socketIO(server, {
   }
 });
 
-// Authentification par socket pour les clients
+// Authentification par socket pour les clients - Ajout d'une vérification plus souple
 io.use((socket, next) => {
   const token = socket.handshake.auth.token;
   
   if (!token) {
-    return next(new Error('Authentification requise'));
+    // Permettre des connexions anonymes pour certaines fonctionnalités
+    socket.user = { id: 'anonymous', role: 'guest' };
+    return next();
   }
   
   try {
@@ -202,7 +204,10 @@ io.use((socket, next) => {
     socket.user = user;
     next();
   } catch (err) {
-    next(new Error('Token invalide ou expiré'));
+    // En cas d'erreur, permettre quand même la connexion en tant qu'invité
+    console.log("Token invalide, connexion en tant qu'invité:", err.message);
+    socket.user = { id: 'anonymous', role: 'guest' };
+    next();
   }
 });
 
