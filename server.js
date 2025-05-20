@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
@@ -188,7 +189,8 @@ const io = socketIO(server, {
     credentials: true
   },
   transports: ['websocket', 'polling'],
-  pingTimeout: 60000
+  pingTimeout: 60000,
+  allowEIO3: true // Enabling older protocol version for compatibility
 });
 
 // Authentification plus souple pour Socket.io
@@ -207,12 +209,12 @@ io.use((socket, next) => {
       socket.user = user;
       next();
     } catch (err) {
-      console.log("Token invalide pour socket:", err.message);
+      console.log("Token invalide pour socket, permettant en tant qu'invité:", err.message);
       socket.user = { id: 'anonymous', role: 'guest' };
       next();
     }
   } catch (e) {
-    console.log("Erreur d'authentification socket:", e);
+    console.log("Erreur d'authentification socket, permettant en tant qu'invité:", e);
     socket.user = { id: 'anonymous', role: 'guest' };
     next();
   }
@@ -227,25 +229,30 @@ io.on('connection', (socket) => {
   console.log('Nouvelle connexion socket:', socket.id);
 
   // Authentifier et stocker l'utilisateur
-  if (socket.user && socket.user.id !== 'anonymous') {
-    // Rejoindre la salle utilisateur
-    socket.join(`user-${socket.user.id}`);
-    console.log(`L'utilisateur ${socket.user.id} a rejoint sa salle privée`);
+  socket.on('authenticate', (userData) => {
+    if (userData && userData.id) {
+      socket.user = userData;
+      socket.join(`user-${userData.id}`);
+      console.log(`L'utilisateur ${userData.id} a rejoint sa salle privée`);
+      
+      // Stocker la connexion active
+      activeUsers.set(userData.id, {
+        socketId: socket.id,
+        userId: userData.id,
+        username: userData.name || userData.email,
+        role: userData.role
+      });
 
-    // Stocker la connexion active
-    activeUsers.set(socket.user.id, {
-      socketId: socket.id,
-      userId: socket.user.id,
-      username: socket.user.name || socket.user.email,
-      role: socket.user.role
-    });
-
-    // Si c'est un admin, rejoindre la salle admin
-    if (socket.user.role === 'admin') {
-      socket.join('admins');
-      console.log(`Admin ${socket.user.id} a rejoint la salle des admins`);
+      // Si c'est un admin, rejoindre la salle admin
+      if (userData.role === 'admin') {
+        socket.join('admins');
+        console.log(`Admin ${userData.id} a rejoint la salle des admins`);
+      }
+      
+      // Envoyer confirmation d'authentification
+      socket.emit('authenticated', { status: 'success', userId: userData.id });
     }
-  }
+  });
 
   // Événements pour les appels vidéo/audio
   socket.on('callUser', (data) => {
@@ -381,6 +388,11 @@ io.on('connection', (socket) => {
       userId: socket.user.id,
       userName: socket.user.name || socket.user.email
     });
+  });
+
+  // Ping/Pong pour garder la connexion active
+  socket.on('ping', () => {
+    socket.emit('pong', { timestamp: Date.now() });
   });
 
   // Gestion de la déconnexion
