@@ -2,7 +2,7 @@
   {
     "id": "1",
     "icon": "ThumbsUp",
-    "text": "Livraison gratuite entre st Paul a st Suzanne"
+    "text": "Livraison gratuite à partir de 100€ d'achat"
   },
   {
     "id": "2",
@@ -13,10 +13,5 @@
     "id": "3",
     "icon": "Clock",
     "text": "Satisfait ou remboursé sous 30 jours"
-  },
-  {
-    "id": "a389fbc5-8236-4425-ab06-ee44caf45a24",
-    "icon": "CreditCard",
-    "text": "Mons 10% pour tous les paiement par cache"
   }
 ]
