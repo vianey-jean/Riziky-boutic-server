@@ -76,6 +76,7 @@ app.use((req, res, next) => {
     'preferences.json',
     'reviews.json',
     'reset-codes.json',
+    'publayout.json', // Ajouté publayout.json à la liste des fichiers de données
   ];
 
   const dataDir = path.join(__dirname, 'data');
@@ -168,6 +169,7 @@ const adminChatRoutes = require('./routes/admin-chat');
 const usersRoutes = require('./routes/users');
 const reviewRoutes = require('./routes/reviews');
 const codePromoRoutes = require('./routes/code-promos');
+const pubLayoutRoutes = require('./routes/pub-layout'); // Ajouté la route pour les publicités
 
 // Routes de l'API
 app.use('/api/auth', authRoutes);
@@ -181,6 +183,7 @@ app.use('/api/admin-chat', adminChatRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/code-promos', codePromoRoutes);
+app.use('/api/pub-layout', pubLayoutRoutes); // Ajouté la route pour les publicités
 
 // Socket.io pour la communication en temps réel
 const io = socketIO(server, {

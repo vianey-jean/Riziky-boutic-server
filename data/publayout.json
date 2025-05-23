@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "icon": "ThumbsUp",
+    "text": "Livraison gratuite entre st Paul a st Suzanne"
+  },
+  {
+    "id": "2",
+    "icon": "Gift",
+    "text": "-10% sur votre première commande avec le code WELCOME10"
+  },
+  {
+    "id": "3",
+    "icon": "Clock",
+    "text": "Satisfait ou remboursé sous 30 jours"
+  },
+  {
+    "id": "a389fbc5-8236-4425-ab06-ee44caf45a24",
+    "icon": "CreditCard",
+    "text": "Mons 10% pour tous les paiement par cache"
+  }
+]
