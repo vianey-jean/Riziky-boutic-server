@@ -44,11 +44,11 @@ router.post('/', isAuthenticated, isAdmin, (req, res) => {
       return res.status(400).json({ message: 'Veuillez fournir tous les champs requis' });
     }
     
-    // Vérifier si le produit existe
+    // Vérifier si le produit existe et récupérer son nom
     const products = JSON.parse(fs.readFileSync(productsFilePath));
-    const productExists = products.some(product => product.id === productId);
+    const product = products.find(product => product.id === productId);
     
-    if (!productExists) {
+    if (!product) {
       return res.status(404).json({ message: 'Produit non trouvé' });
     }
     
@@ -65,7 +65,8 @@ router.post('/', isAuthenticated, isAdmin, (req, res) => {
       code,
       pourcentage: parseInt(pourcentage),
       quantite: parseInt(quantite),
-      productId
+      productId,
+      productName: product.name
     };
     
     codePromos.push(newCodePromo);
