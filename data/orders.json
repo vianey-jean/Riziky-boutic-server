@@ -1,2 +1,84 @@
-
-[]
+[
+  {
+    "id": "ORD-1747996997321",
+    "userId": "3",
+    "userName": "RABEMANALINA  Jean Marie",
+    "userEmail": "vianey.jean@ymail.com",
+    "items": [
+      {
+        "productId": "1746760831010",
+        "name": "Perruque 💯 cheveux humain , bouclé coloré, 16 pouces",
+        "price": 112.5,
+        "originalPrice": 150,
+        "quantity": 1,
+        "image": "/uploads/images-1746760831007-189769899.jpg",
+        "subtotal": 112.5
+      },
+      {
+        "productId": "1746726531059",
+        "name": "4 Paquet Tissage 💯cheveux naturelle, 20 pouces",
+        "price": 50,
+        "originalPrice": 50,
+        "quantity": 1,
+        "image": "/uploads/images-1746726531053-828134332.jpg",
+        "subtotal": 50
+      }
+    ],
+    "totalAmount": 162.5,
+    "originalAmount": 162.5,
+    "discount": 0,
+    "shippingAddress": {
+      "nom": "RABEMANALINA",
+      "prenom": "Jean Marie",
+      "adresse": "21 rue de paris",
+      "ville": "Saint-Denis",
+      "codePostal": "97400",
+      "pays": "La Réunion",
+      "telephone": "0692198701"
+    },
+    "paymentMethod": "card",
+    "codePromoUsed": null,
+    "status": "confirmée",
+    "createdAt": "2025-05-23T10:43:17.321Z",
+    "updatedAt": "2025-05-23T10:43:17.321Z"
+  },
+  {
+    "id": "ORD-1747997123546",
+    "userId": "3",
+    "userName": "RABEMANALINA  Jean Marie",
+    "userEmail": "vianey.jean@ymail.com",
+    "items": [
+      {
+        "productId": "1746726531059",
+        "name": "4 Paquet Tissage 💯cheveux naturelle, 20 pouces",
+        "price": 45,
+        "originalPrice": 50,
+        "quantity": 1,
+        "image": "/uploads/images-1746726531053-828134332.jpg",
+        "subtotal": 45
+      }
+    ],
+    "totalAmount": 40.5,
+    "originalAmount": 45,
+    "discount": 4.5,
+    "shippingAddress": {
+      "nom": "RABEMANALINA",
+      "prenom": "Jean Marie",
+      "adresse": "21 rue de paris",
+      "ville": "Saint-Benoît",
+      "codePostal": "97400",
+      "pays": "La Réunion",
+      "telephone": "0692198701"
+    },
+    "paymentMethod": "card",
+    "codePromoUsed": {
+      "code": "T651K9FZ7W",
+      "productId": "1746726531059",
+      "pourcentage": 10,
+      "discountAmount": 4.5
+    },
+    "status": "confirmée",
+    "createdAt": "2025-05-23T10:45:23.546Z",
+    "updatedAt": "2025-05-23T10:45:23.546Z"
+  }
+]

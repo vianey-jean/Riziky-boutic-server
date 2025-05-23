@@ -34,25 +34,6 @@ function writeJSON(filePath, data) {
   }
 }
 
-// Fonction pour normaliser les données des produits dans la commande
-function normalizeOrderItems(items, products) {
-  return items.map(item => {
-    const product = products.find(p => p.id === item.productId);
-    if (!product) {
-      throw new Error(`Produit non trouvé: ${item.productId}`);
-    }
-    
-    return {
-      productId: item.productId,
-      name: product.name || item.name || "Produit sans nom",
-      price: item.price || product.price,
-      quantity: item.quantity,
-      image: product.images?.[0] || product.image || null,
-      subtotal: (item.price || product.price) * item.quantity
-    };
-  });
-}
-
 // Route pour obtenir toutes les commandes (pour l'admin)
 router.get('/', isAuthenticated, async (req, res) => {
   try {
@@ -78,109 +59,129 @@ router.get('/user', isAuthenticated, async (req, res) => {
 
 // Route pour créer une commande
 router.post('/', isAuthenticated, async (req, res) => {
+  console.log('Requête reçue pour créer une commande:', JSON.stringify(req.body));
+  
   try {
     const { items, shippingAddress, paymentMethod, codePromo } = req.body;
 
+    // Convertir les items de format objet à format tableau si nécessaire
+    let itemsArray = items;
+    if (items && typeof items === 'object' && !Array.isArray(items)) {
+      itemsArray = Object.values(items);
+    }
+
     // Validation des items
-    if (!items || !Array.isArray(items) || items.length === 0) {
+    if (!itemsArray || !Array.isArray(itemsArray) || itemsArray.length === 0) {
       return res.status(400).json({ message: 'La commande doit contenir au moins un article.' });
     }
 
-    // Récupérer les produits pour vérification
+    // Validation de l'adresse de livraison
+    const requiredFields = ['nom', 'prenom', 'adresse', 'ville', 'codePostal', 'pays', 'telephone'];
+    for (const field of requiredFields) {
+      if (!shippingAddress || !shippingAddress[field]) {
+        return res.status(400).json({ message: `Le champ ${field} de l'adresse est requis.` });
+      }
+    }
+
+    // Validation de la méthode de paiement
+    if (!paymentMethod || typeof paymentMethod !== 'string') {
+      return res.status(400).json({ message: 'La méthode de paiement est requise.' });
+    }
+
+    // Récupérer les produits pour enrichir les données
     const products = readJSON(productsPath);
     
-    try {
-      // Normaliser les données des produits
-      const normalizedItems = normalizeOrderItems(items, products);
-      
-      // Validation de l'adresse de livraison
-      const requiredFields = ['nom', 'prenom', 'adresse', 'ville', 'codePostal', 'pays', 'telephone'];
-      for (const field of requiredFields) {
-        if (!shippingAddress || !shippingAddress[field] || typeof shippingAddress[field] !== 'string') {
-          return res.status(400).json({ message: `Le champ ${field} de l'adresse est requis.` });
-        }
+    // Enrichir les items avec les informations des produits
+    const enrichedItems = itemsArray.map(item => {
+      const product = products.find(p => p.id === item.productId);
+      if (!product) {
+        throw new Error(`Produit non trouvé: ${item.productId}`);
       }
-
-      // Validation de la méthode de paiement
-      if (!paymentMethod || typeof paymentMethod !== 'string') {
-        return res.status(400).json({ message: 'La méthode de paiement est requise.' });
-      }
-
-      // Lire les commandes existantes
-      const orders = readJSON(ordersPath);
-      const commandes = readJSON(commandesPath);
-
-      // Calculer le montant total
-      let totalAmount = normalizedItems.reduce((sum, item) => sum + item.subtotal, 0);
       
-      // Traitement du code promo si présent
-      let codePromoUsed = null;
-      let discount = 0;
-      
-      if (codePromo) {
-        const codePromos = readJSON(codePromosPath);
-        const promoIndex = codePromos.findIndex(cp => cp.code === codePromo);
-        
-        if (promoIndex !== -1 && codePromos[promoIndex].quantite > 0) {
-          const promo = codePromos[promoIndex];
-          
-          // Vérifier si le code promo s'applique à un des produits dans le panier
-          const applicableItem = normalizedItems.find(item => item.productId === promo.productId);
-          
-          if (applicableItem) {
-            // Calculer la remise
-            discount = (promo.pourcentage / 100) * applicableItem.subtotal;
-            totalAmount -= discount;
-            
-            // Mettre à jour le code promo (décrémenter la quantité)
-            codePromos[promoIndex].quantite -= 1;
-            writeJSON(codePromosPath, codePromos);
-            
-            codePromoUsed = {
-              code: promo.code,
-              productId: promo.productId,
-              pourcentage: promo.pourcentage,
-              discountAmount: discount
-            };
-          }
-        }
-      }
-
-      // Créer une nouvelle commande avec ID unique
-      const orderId = `ORD-${Date.now()}`;
-      const newOrder = {
-        id: orderId,
-        userId: req.user.id,
-        userName: `${req.user.nom} ${req.user.prenom || ''}`.trim(),
-        userEmail: req.user.email,
-        items: normalizedItems,
-        totalAmount,
-        originalAmount: normalizedItems.reduce((sum, item) => sum + item.subtotal, 0),
-        discount: discount,
-        shippingAddress,
-        paymentMethod,
-        codePromoUsed,
-        status: 'confirmée',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+      return {
+        productId: item.productId,
+        name: product.name,
+        price: item.price,
+        originalPrice: product.originalPrice || product.price,
+        quantity: item.quantity,
+        image: product.images?.[0] || product.image || null,
+        subtotal: item.price * item.quantity
       };
+    });
 
-      // Enregistrer la commande dans orders.json et commandes.json
-      orders.push(newOrder);
-      commandes.push(newOrder);
+    // Lire les commandes existantes
+    const orders = readJSON(ordersPath);
+    const commandes = readJSON(commandesPath);
 
-      const ordersSaved = writeJSON(ordersPath, orders);
-      const commandesSaved = writeJSON(commandesPath, commandes);
-
-      if (!ordersSaved || !commandesSaved) {
-        throw new Error("Erreur lors de l'enregistrement de la commande");
+    // Calculer le montant total
+    let totalAmount = enrichedItems.reduce((sum, item) => sum + item.subtotal, 0);
+    let originalAmount = totalAmount;
+    
+    // Traitement du code promo si présent
+    let codePromoUsed = null;
+    let discount = 0;
+    
+    if (codePromo) {
+      const codePromos = readJSON(codePromosPath);
+      const promoIndex = codePromos.findIndex(cp => cp.code === codePromo.code);
+      
+      if (promoIndex !== -1 && codePromos[promoIndex].quantite > 0) {
+        const promo = codePromos[promoIndex];
+        
+        // Vérifier si le code promo s'applique à un des produits dans le panier
+        const applicableItem = enrichedItems.find(item => item.productId === promo.productId);
+        
+        if (applicableItem) {
+          // Calculer la remise
+          discount = (promo.pourcentage / 100) * applicableItem.subtotal;
+          totalAmount -= discount;
+          
+          // Mettre à jour le code promo (décrémenter la quantité)
+          codePromos[promoIndex].quantite -= 1;
+          writeJSON(codePromosPath, codePromos);
+          
+          codePromoUsed = {
+            code: promo.code,
+            productId: promo.productId,
+            pourcentage: promo.pourcentage,
+            discountAmount: discount
+          };
+        }
       }
-
-      res.status(201).json(newOrder);
-    } catch (error) {
-      console.error('Erreur lors du traitement des produits:', error);
-      return res.status(400).json({ message: error.message });
     }
+
+    // Créer une nouvelle commande avec ID unique
+    const orderId = `ORD-${Date.now()}`;
+    const newOrder = {
+      id: orderId,
+      userId: req.user.id,
+      userName: `${req.user.nom} ${req.user.prenom || ''}`.trim(),
+      userEmail: req.user.email,
+      items: enrichedItems,
+      totalAmount,
+      originalAmount,
+      discount,
+      shippingAddress,
+      paymentMethod,
+      codePromoUsed,
+      status: 'confirmée',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    // Enregistrer la commande dans orders.json et commandes.json
+    orders.push(newOrder);
+    commandes.push(newOrder);
+
+    const ordersSaved = writeJSON(ordersPath, orders);
+    const commandesSaved = writeJSON(commandesPath, commandes);
+
+    if (!ordersSaved || !commandesSaved) {
+      throw new Error("Erreur lors de l'enregistrement de la commande");
+    }
+    
+    console.log('Commande créée avec succès:', orderId);
+    res.status(201).json(newOrder);
   } catch (error) {
     console.error('Erreur lors de la création de la commande:', error);
     res.status(500).json({ message: 'Erreur interne du serveur.' });

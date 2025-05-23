@@ -1,17 +1,6 @@
 [
   {
     "userId": "3",
-    "items": [
-      {
-        "productId": "1746760831010",
-        "quantity": 1,
-        "price": 112.5
-      },
-      {
-        "productId": "1746726531059",
-        "quantity": 1,
-        "price": 50
-      }
-    ]
+    "items": []
   }
 ]
