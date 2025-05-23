@@ -4,6 +4,10 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 const secretKey = 'your_jwt_secret'; // Devrait être dans une variable d'environnement
 
+
+
+
+
 // Middleware pour vérifier si l'utilisateur est connecté
 exports.isAuthenticated = (req, res, next) => {
   const authHeader = req.headers.authorization;

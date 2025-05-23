@@ -48,5 +48,17 @@
     ],
     "createdAt": "2025-05-17T19:31:22.221Z",
     "updatedAt": "2025-05-17T19:31:22.221Z"
+  },
+  {
+    "id": "1747936997060",
+    "userId": "3",
+    "userName": "Jean Marie RABEMANALINA",
+    "productId": "1746726531059",
+    "productRating": 5,
+    "deliveryRating": 5,
+    "comment": "tres jolie tissages",
+    "photos": [],
+    "createdAt": "2025-05-22T18:03:17.060Z",
+    "updatedAt": "2025-05-22T18:03:17.060Z"
   }
 ]

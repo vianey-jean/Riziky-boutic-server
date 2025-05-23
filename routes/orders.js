@@ -1,176 +1,84 @@
-
 const express = require('express');
-const router = express.Router();
 const fs = require('fs');
 const path = require('path');
-const { isAuthenticated, isAdmin } = require('../middlewares/auth');
+const { isAuthenticated } = require('../middlewares/auth');
 
-const ordersFilePath = path.join(__dirname, '../data/commandes.json');
-const productsFilePath = path.join(__dirname, '../data/products.json');
+const router = express.Router();
 
-// Vérifier si le fichier commandes.json existe, sinon le créer
-if (!fs.existsSync(ordersFilePath)) {
-  fs.writeFileSync(ordersFilePath, JSON.stringify([], null, 2));
+// Chemins vers les fichiers JSON
+const ordersPath = path.join(__dirname, '../data/orders.json');
+const commandesPath = path.join(__dirname, '../data/commandes.json');
+
+// Fonction utilitaire pour lire un fichier JSON
+function readJSON(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 
-// Obtenir toutes les commandes (admin seulement)
-router.get('/', isAuthenticated, isAdmin, (req, res) => {
-  try {
-    const orders = JSON.parse(fs.readFileSync(ordersFilePath));
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de la récupération des commandes' });
-  }
-});
+// Fonction utilitaire pour écrire dans un fichier JSON
+function writeJSON(filePath, data) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+}
 
-// Obtenir les commandes d'un utilisateur
-router.get('/user', isAuthenticated, (req, res) => {
-  try {
-    const orders = JSON.parse(fs.readFileSync(ordersFilePath));
-    const userOrders = orders.filter(order => order.userId === req.user.id);
-    res.json(userOrders);
-  } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de la récupération des commandes' });
-  }
-});
-
-// Obtenir une commande spécifique
-router.get('/:orderId', isAuthenticated, (req, res) => {
-  try {
-    const orders = JSON.parse(fs.readFileSync(ordersFilePath));
-    const order = orders.find(o => o.id === req.params.orderId);
-    
-    if (!order) {
-      return res.status(404).json({ message: 'Commande non trouvée' });
-    }
-    
-    // Vérifier que l'utilisateur a accès à cette commande ou est admin
-    if (order.userId !== req.user.id && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Accès non autorisé à cette commande' });
-    }
-    
-    res.json(order);
-  } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de la récupération de la commande' });
-  }
-});
-
-// Créer une nouvelle commande
 router.post('/', isAuthenticated, async (req, res) => {
   try {
-    const { items, shippingAddress, paymentMethod } = req.body;
-    
+    const { items, shippingAddress, paymentMethod, codePromo } = req.body;
+
+    // Validation des items
     if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ message: 'Aucun article dans la commande' });
+      return res.status(400).json({ message: 'La commande doit contenir au moins un article.' });
     }
-    
-    // Vérifier et mettre à jour le stock de chaque produit
-    const products = JSON.parse(fs.readFileSync(productsFilePath));
-    let totalAmount = 0;
-    const orderItems = [];
-    
+
     for (const item of items) {
-      const productIndex = products.findIndex(p => p.id === item.productId);
-      
-      if (productIndex === -1) {
-        return res.status(400).json({ 
-          message: `Produit ${item.productId} non trouvé` 
-        });
+      if (!item.productId || typeof item.productId !== 'string') {
+        return res.status(400).json({ message: 'Chaque article doit avoir un productId valide.' });
       }
-      
-      const product = products[productIndex];
-      
-      if (!product.stock || product.stock < item.quantity) {
-        return res.status(400).json({ 
-          message: `Stock insuffisant pour le produit ${product.name}` 
-        });
+      if (typeof item.quantity !== 'number' || item.quantity <= 0) {
+        return res.status(400).json({ message: 'Chaque article doit avoir une quantité valide.' });
       }
-      
-      // Mettre à jour le stock
-      product.stock -= item.quantity;
-      product.isSold = product.stock > 0;
-      
-      // Déterminer l'image principale à utiliser
-      let productImage = '';
-      
-      // Si le produit a plusieurs images, utiliser la première
-      if (product.images && product.images.length > 0) {
-        productImage = product.images[0];
-      } else if (product.image) {
-        // Sinon, utiliser l'image unique du produit
-        productImage = product.image;
+      if (typeof item.price !== 'number' || item.price < 0) {
+        return res.status(400).json({ message: 'Chaque article doit avoir un prix valide.' });
       }
-      
-      // Ajouter le produit à la commande avec l'image correcte
-      const orderItem = {
-        productId: product.id,
-        name: product.name,
-        price: product.price,
-        quantity: item.quantity,
-        image: productImage, // Utiliser l'image principale
-        subtotal: product.price * item.quantity
-      };
-      
-      orderItems.push(orderItem);
-      totalAmount += orderItem.subtotal;
-      
-      // Mettre à jour le produit dans la liste
-      products[productIndex] = product;
     }
-    
-    // Enregistrer les modifications de stock
-    fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2));
-    
-    // Créer la commande
-    const orders = JSON.parse(fs.readFileSync(ordersFilePath));
+
+    // Validation de l'adresse de livraison
+    const requiredFields = ['nom', 'prenom', 'adresse', 'ville', 'codePostal', 'pays', 'telephone'];
+    for (const field of requiredFields) {
+      if (!shippingAddress || !shippingAddress[field] || typeof shippingAddress[field] !== 'string') {
+        return res.status(400).json({ message: `Le champ ${field} de l'adresse est requis.` });
+      }
+    }
+
+    // Validation de la méthode de paiement
+    if (!paymentMethod || typeof paymentMethod !== 'string') {
+      return res.status(400).json({ message: 'La méthode de paiement est requise.' });
+    }
+
+    // Lire les commandes existantes
+    const orders = readJSON(ordersPath);
+    const commandes = readJSON(commandesPath);
+
+    // Créer une nouvelle commande
     const newOrder = {
-      id: `ORD-${Date.now()}`,
-      userId: req.user.id,
-      userName: req.user.nom,
-      userEmail: req.user.email,
-      items: orderItems,
-      totalAmount: parseFloat(totalAmount.toFixed(2)),
+      id: Date.now().toString(),
+      user: req.user.id,
+      items,
       shippingAddress,
       paymentMethod,
-      status: 'confirmée',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      codePromo: codePromo || null,
+      createdAt: new Date().toISOString()
     };
-    
+
+    // Enregistrer la commande dans orders.json et commandes.json
     orders.push(newOrder);
-    fs.writeFileSync(ordersFilePath, JSON.stringify(orders, null, 2));
-    
+    commandes.push(newOrder);
+
+    writeJSON(ordersPath, orders);
+    writeJSON(commandesPath, commandes);
+
     res.status(201).json(newOrder);
   } catch (error) {
     console.error('Erreur lors de la création de la commande:', error);
-    res.status(500).json({ message: 'Erreur lors de la création de la commande' });
-  }
-});
-
-// Mettre à jour le statut d'une commande (admin seulement)
-router.put('/:orderId/status', isAuthenticated, isAdmin, (req, res) => {
-  try {
-    const { status } = req.body;
-    
-    if (!status || !['confirmée', 'en préparation', 'en livraison', 'livrée'].includes(status)) {
-      return res.status(400).json({ message: 'Statut invalide' });
-    }
-    
-    const orders = JSON.parse(fs.readFileSync(ordersFilePath));
-    const orderIndex = orders.findIndex(o => o.id === req.params.orderId);
-    
-    if (orderIndex === -1) {
-      return res.status(404).json({ message: 'Commande non trouvée' });
-    }
-    
-    orders[orderIndex].status = status;
-    orders[orderIndex].updatedAt = new Date().toISOString();
-    
-    fs.writeFileSync(ordersFilePath, JSON.stringify(orders, null, 2));
-    
-    res.json(orders[orderIndex]);
-  } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de la mise à jour du statut de la commande' });
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
   }
 });
 
