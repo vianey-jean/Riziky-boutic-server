@@ -88,7 +88,7 @@ router.post('/', isAuthenticated, async (req, res) => {
       return res.status(400).json({ message: 'La méthode de paiement est requise.' });
     }
 
-    // Récupérer les produits pour enrichir les données
+    // Récupérer les produits pour enrichir les données et vérifier le stock
     const products = readJSON(productsPath);
     
     // Enrichir les items avec les informations des produits
@@ -96,6 +96,11 @@ router.post('/', isAuthenticated, async (req, res) => {
       const product = products.find(p => p.id === item.productId);
       if (!product) {
         throw new Error(`Produit non trouvé: ${item.productId}`);
+      }
+      
+      // Vérifier le stock disponible
+      if (product.stock !== undefined && product.stock < item.quantity) {
+        throw new Error(`Stock insuffisant pour ${product.name}. Disponible: ${product.stock}, Demandé: ${item.quantity}`);
       }
       
       return {
@@ -180,11 +185,37 @@ router.post('/', isAuthenticated, async (req, res) => {
       throw new Error("Erreur lors de l'enregistrement de la commande");
     }
     
+    // Mettre à jour le stock des produits achetés
+    const updatedProducts = products.map(product => {
+      const orderedItem = enrichedItems.find(item => item.productId === product.id);
+      
+      if (orderedItem) {
+        // Réduire le stock du produit
+        const newStock = Math.max(0, product.stock - orderedItem.quantity);
+        
+        return {
+          ...product,
+          stock: newStock,
+          isSold: newStock > 0 // Mettre à jour le statut de disponibilité
+        };
+      }
+      
+      return product;
+    });
+    
+    // Enregistrer les produits mis à jour
+    const productsSaved = writeJSON(productsPath, updatedProducts);
+    
+    if (!productsSaved) {
+      console.error("Le stock des produits n'a pas pu être mis à jour");
+      // On ne bloque pas la commande pour autant, on continue
+    }
+    
     console.log('Commande créée avec succès:', orderId);
     res.status(201).json(newOrder);
   } catch (error) {
     console.error('Erreur lors de la création de la commande:', error);
-    res.status(500).json({ message: 'Erreur interne du serveur.' });
+    res.status(500).json({ message: 'Erreur interne du serveur: ' + error.message });
   }
 });
 
