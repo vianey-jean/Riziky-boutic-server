@@ -55,7 +55,7 @@
     "image": "/uploads/images-1746726531053-828134332.jpg",
     "promotion": null,
     "promotionEnd": null,
-    "stock": 4,
+    "stock": 7,
     "isSold": true,
     "dateAjout": "2025-05-08T17:48:51.059Z"
   },
@@ -95,7 +95,7 @@
     "image": "/uploads/images-1746760831007-189769899.jpg",
     "promotion": 25,
     "promotionEnd": "2025-10-17T14:54:30.773Z",
-    "stock": 1,
+    "stock": 3,
     "isSold": true,
     "dateAjout": "2025-05-09T03:20:31.010Z"
   }

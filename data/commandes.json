@@ -1,36 +1,6 @@
 [
   {
-    "id": "ORD-1747507193174",
-    "userId": "3",
-    "userName": "RABEMANALINA ",
-    "userEmail": "vianey.jean@ymail.com",
-    "items": [
-      {
-        "productId": "1746726531059",
-        "name": "4 Paquet Tissage 💯cheveux naturelle, 20 pouces",
-        "price": 50,
-        "quantity": 1,
-        "image": "/uploads/images-1746726531053-828134332.jpg",
-        "subtotal": 50
-      }
-    ],
-    "totalAmount": 50,
-    "shippingAddress": {
-      "nom": "RABEMANALINA ",
-      "prenom": "Jean Marie",
-      "adresse": "21 rue de paris",
-      "ville": "Saint-Denis",
-      "codePostal": "97400",
-      "pays": "La Réunion",
-      "telephone": "0692198701"
-    },
-    "paymentMethod": "stripe",
-    "status": "en préparation",
-    "createdAt": "2025-05-17T18:39:53.174Z",
-    "updatedAt": "2025-05-17T18:40:17.789Z"
-  },
-  {
-    "id": "ORD-1747996997321",
+    "id": "ORD-1748097370624",
     "userId": "3",
     "userName": "RABEMANALINA  Jean Marie",
     "userEmail": "vianey.jean@ymail.com",
@@ -66,50 +36,10 @@
       "pays": "La Réunion",
       "telephone": "0692198701"
     },
-    "paymentMethod": "card",
+    "paymentMethod": "cash",
     "codePromoUsed": null,
     "status": "confirmée",
-    "createdAt": "2025-05-23T10:43:17.321Z",
-    "updatedAt": "2025-05-23T10:43:17.321Z"
-  },
-  
-  {
-    "id": "ORD-1748011251974",
-    "userId": "3",
-    "userName": "RABEMANALINA  Jean Marie",
-    "userEmail": "vianey.jean@ymail.com",
-    "items": [
-      {
-        "productId": "1746726531059",
-        "name": "4 Paquet Tissage 💯cheveux naturelle, 20 pouces",
-        "price": 45,
-        "originalPrice": 50,
-        "quantity": 3,
-        "image": "/uploads/images-1746726531053-828134332.jpg",
-        "subtotal": 135
-      }
-    ],
-    "totalAmount": 121.5,
-    "originalAmount": 135,
-    "discount": 13.5,
-    "shippingAddress": {
-      "nom": "RABEMANALINA",
-      "prenom": "Jean Marie",
-      "adresse": "21 rue de paris",
-      "ville": "Saint-Denis",
-      "codePostal": "97400",
-      "pays": "La Réunion",
-      "telephone": "0692198701"
-    },
-    "paymentMethod": "cash",
-    "codePromoUsed": {
-      "code": "T651K9FZ7W",
-      "productId": "1746726531059",
-      "pourcentage": 10,
-      "discountAmount": 13.5
-    },
-    "status": "confirmée",
-    "createdAt": "2025-05-23T14:40:51.974Z",
-    "updatedAt": "2025-05-23T14:40:51.974Z"
+    "createdAt": "2025-05-24T14:36:10.624Z",
+    "updatedAt": "2025-05-24T14:36:10.624Z"
   }
 ]

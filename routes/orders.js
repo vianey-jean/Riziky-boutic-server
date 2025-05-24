@@ -281,18 +281,26 @@ router.post('/:id/cancel', isAuthenticated, async (req, res) => {
     );
     
     if (remainingItems.length === 0) {
-      // Supprimer complètement la commande si tous les items sont annulés
+      // Supprimer complètement la commande seulement si TOUS les items sont annulés
       orders.splice(orderIndex, 1);
       commandes.splice(commandeIndex, 1);
+      
+      // Sauvegarder les commandes mises à jour
+      writeJSON(ordersPath, orders);
+      writeJSON(commandesPath, commandes);
+      
+      console.log(`Commande ${orderId} complètement annulée - tous les produits ont été supprimés`);
+      res.json({ message: 'Commande complètement annulée', cancelled: true });
     } else {
-      // Mettre à jour la commande avec les items restants
+      // Mettre à jour la commande avec les items restants - NE JAMAIS SUPPRIMER LA COMMANDE
+      const newOriginalAmount = remainingItems.reduce((sum, item) => sum + (item.originalPrice || item.price) * item.quantity, 0);
       const newTotalAmount = remainingItems.reduce((sum, item) => sum + item.subtotal, 0);
       
       // Recalculer la remise si un code promo était appliqué
       let newDiscount = 0;
       let newCodePromoUsed = order.codePromoUsed;
       
-      if (order.codePromoUsed) {
+      if (order.codePromoUsed && typeof order.codePromoUsed === 'object') {
         // Vérifier si le produit avec le code promo est encore dans la commande
         const promoProductStillInOrder = remainingItems.find(
           item => item.productId === order.codePromoUsed.productId
@@ -301,9 +309,14 @@ router.post('/:id/cancel', isAuthenticated, async (req, res) => {
         if (promoProductStillInOrder) {
           // Recalculer la remise sur le produit restant
           newDiscount = (order.codePromoUsed.pourcentage / 100) * promoProductStillInOrder.subtotal;
+          newCodePromoUsed = {
+            ...order.codePromoUsed,
+            discountAmount: newDiscount
+          };
         } else {
           // Le produit avec le code promo a été annulé, supprimer le code promo
           newCodePromoUsed = null;
+          newDiscount = 0;
         }
       }
       
@@ -313,7 +326,7 @@ router.post('/:id/cancel', isAuthenticated, async (req, res) => {
         ...order,
         items: remainingItems,
         totalAmount: finalTotalAmount,
-        originalAmount: newTotalAmount,
+        originalAmount: newOriginalAmount,
         discount: newDiscount,
         codePromoUsed: newCodePromoUsed,
         updatedAt: new Date().toISOString()
@@ -321,21 +334,18 @@ router.post('/:id/cancel', isAuthenticated, async (req, res) => {
       
       orders[orderIndex] = updatedOrder;
       commandes[commandeIndex] = updatedOrder;
-    }
-    
-    // Sauvegarder les commandes mises à jour
-    writeJSON(ordersPath, orders);
-    writeJSON(commandesPath, commandes);
-    
-    console.log(`Commande ${orderId} - Items annulés:`, itemsToRemove);
-    
-    if (remainingItems.length === 0) {
-      res.json({ message: 'Commande complètement annulée', cancelled: true });
-    } else {
+      
+      // Sauvegarder les commandes mises à jour
+      writeJSON(ordersPath, orders);
+      writeJSON(commandesPath, commandes);
+      
+      console.log(`Commande ${orderId} - Produits annulés:`, itemsToRemove);
+      console.log(`Produits restants dans la commande:`, remainingItems.length);
+      
       res.json({ 
-        message: 'Items sélectionnés annulés avec succès', 
+        message: 'Produits sélectionnés annulés avec succès. La commande a été mise à jour.', 
         cancelled: false,
-        updatedOrder: orders[orderIndex]
+        updatedOrder: updatedOrder
       });
     }
     
