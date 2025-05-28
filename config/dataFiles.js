@@ -16,6 +16,7 @@ const dataFiles = [
   'reset-codes.json',
   'publayout.json',
   'remboursements.json',
+  'banniereflashsale.json',
 ];
 
 const initializeDataFiles = (req, res, next) => {
