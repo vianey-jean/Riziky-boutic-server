@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1",
+    "name": "perruques",
+    "description": "Perruques de qualité",
+    "order": 2,
+    "isActive": true,
+    "createdAt": "2025-05-28T00:00:00.000Z",
+    "updatedAt": "2025-05-28T05:10:05.865Z"
+  },
+  {
+    "id": "2",
+    "name": "tissages",
+    "description": "Tissages et extensions",
+    "order": 1,
+    "isActive": true,
+    "createdAt": "2025-05-28T00:00:00.000Z",
+    "updatedAt": "2025-05-28T05:10:02.539Z"
+  },
+  {
+    "id": "3",
+    "name": "queue de cheval",
+    "description": "Queues de cheval",
+    "order": 3,
+    "isActive": true,
+    "createdAt": "2025-05-28T00:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "name": "peigne chauffante",
+    "description": "Peignes chauffants",
+    "order": 4,
+    "isActive": true,
+    "createdAt": "2025-05-28T00:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "name": "colle - dissolvant",
+    "description": "Colles et dissolvants",
+    "order": 5,
+    "isActive": true,
+    "createdAt": "2025-05-28T00:00:00.000Z"
+  },
+  {
+    "id": "1748409055615",
+    "name": "Tech",
+    "description": "téléphonie",
+    "order": 6,
+    "isActive": true,
+    "createdAt": "2025-05-28T05:10:55.615Z"
+  }
+]
