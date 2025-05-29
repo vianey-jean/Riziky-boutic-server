@@ -1,29 +1,26 @@
 [
   {
-    "id": "1746726531059",
-    "name": "4 Paquet Tissage 💯cheveux naturelle, 20 pouces",
-    "description": "👉: Paquet Tissage💯 cheveux naturelle.\r\n👉: Qualité 12A.\r\n👉: Cheveux bouclé, 100g le paquet.\r\n👉:  20 pouces\r\n👉: couleur Naturelle. \r\n👉: Peut être coloriée.\r\n👉: Le prix est de 50€ le paquet (MP).\r\n👉: La livraison sur toute l’île 🇷🇪, gratuite entre st Paul à st Suzanne.",
-    "price": 50,
-    "originalPrice": 50,
-    "category": "Tissages",
+    "id": "1748532716997",
+    "name": "Iphone 13 pro max",
+    "description": "iphone 13 pro max, original. 256 g0",
+    "price": 500,
+    "originalPrice": 500,
+    "category": "Tech",
     "images": [
-      "/uploads/images-1746726531053-828134332.jpg",
-      "/uploads/images-1746726531054-879354531.jpg",
-      "/uploads/images-1746726531056-99821469.jpg",
-      "/uploads/images-1746726531057-363519626.jpg"
+      "/uploads/images-1748532716991-379109378.jpg"
     ],
-    "image": "/uploads/images-1746726531053-828134332.jpg",
+    "image": "/uploads/images-1748532716991-379109378.jpg",
     "promotion": null,
     "promotionEnd": null,
-    "stock": 7,
+    "stock": 1,
     "isSold": true,
-    "dateAjout": "2025-05-08T17:48:51.059Z",
-    "flashSaleDiscount": 10,
-    "flashSaleStartDate": "2025-05-28T00:00",
-    "flashSaleEndDate": "2025-05-28T23:59",
-    "flashSaleTitle": "Ventes pour les admirateur tissages",
-    "flashSaleDescription": "perruque bouclé blonde miel 16 pouces",
-    "originalFlashPrice": 50,
-    "flashSalePrice": 45
+    "dateAjout": "2025-05-29T15:31:56.997Z",
+    "flashSaleDiscount": 30,
+    "flashSaleStartDate": "2025-05-29T00:00",
+    "flashSaleEndDate": "2025-06-05T23:59",
+    "flashSaleTitle": "Ventes flash Iphone 13 pro max",
+    "flashSaleDescription": "Ventes iphone 13 prox max",
+    "originalFlashPrice": 500,
+    "flashSalePrice": 350
   }
 ]

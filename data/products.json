@@ -98,5 +98,22 @@
     "stock": 3,
     "isSold": true,
     "dateAjout": "2025-05-09T03:20:31.010Z"
+  },
+  {
+    "id": "1748532716997",
+    "name": "Iphone 13 pro max",
+    "description": "iphone 13 pro max, original. 256 g0",
+    "price": 500,
+    "originalPrice": 500,
+    "category": "Tech",
+    "images": [
+      "/uploads/images-1748532716991-379109378.jpg"
+    ],
+    "image": "/uploads/images-1748532716991-379109378.jpg",
+    "promotion": null,
+    "promotionEnd": null,
+    "stock": 1,
+    "isSold": true,
+    "dateAjout": "2025-05-29T15:31:56.997Z"
   }
 ]
