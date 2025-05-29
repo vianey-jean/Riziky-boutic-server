@@ -98,22 +98,5 @@
     "stock": 3,
     "isSold": true,
     "dateAjout": "2025-05-09T03:20:31.010Z"
-  },
-  {
-    "id": "1748409935774",
-    "name": "iphone",
-    "description": "iphone 13 prox max",
-    "price": 500,
-    "originalPrice": 500,
-    "category": "Tech",
-    "images": [
-      "/uploads/images-1748410017922-218614336.jpg"
-    ],
-    "image": "/uploads/images-1748410017922-218614336.jpg",
-    "promotion": null,
-    "promotionEnd": null,
-    "stock": 1,
-    "isSold": true,
-    "dateAjout": "2025-05-28T05:25:35.774Z"
   }
 ]
