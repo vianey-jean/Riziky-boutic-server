@@ -18,6 +18,8 @@ const dataFiles = [
   'remboursements.json',
   'banniereflashsale.json',
   'categories.json',
+  'visitors.json',
+  'sales-notifications.json',
 ];
 
 const initializeDataFiles = (req, res, next) => {

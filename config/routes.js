@@ -1,37 +1,61 @@
 
-const authRoutes = require('../routes/auth');
-const productRoutes = require('../routes/products');
-const panierRoutes = require('../routes/panier');
-const favoriteRoutes = require('../routes/favorites');
-const orderRoutes = require('../routes/orders');
-const contactRoutes = require('../routes/contacts');
-const clientChatRoutes = require('../routes/client-chat');
-const adminChatRoutes = require('../routes/admin-chat');
-const usersRoutes = require('../routes/users');
-const reviewRoutes = require('../routes/reviews');
-const codePromoRoutes = require('../routes/code-promos');
-const pubLayoutRoutes = require('../routes/pub-layout');
-const remboursementRoutes = require('../routes/remboursements');
-const flashSaleRoutes = require('../routes/flash-sales');
-const categoriesRoutes = require('../routes/categories');
+const { initializeDataFiles } = require('./dataFiles');
 
 const setupRoutes = (app) => {
-  // Routes de l'API
-  app.use('/api/auth', authRoutes);
-  app.use('/api/products', productRoutes);
-  app.use('/api/panier', panierRoutes);
-  app.use('/api/favorites', favoriteRoutes);
-  app.use('/api/orders', orderRoutes);
-  app.use('/api/contacts', contactRoutes);
-  app.use('/api/client-chat', clientChatRoutes);
-  app.use('/api/admin-chat', adminChatRoutes);
-  app.use('/api/users', usersRoutes);
-  app.use('/api/reviews', reviewRoutes);
-  app.use('/api/code-promos', codePromoRoutes);
-  app.use('/api/pub-layout', pubLayoutRoutes);
-  app.use('/api/remboursements', remboursementRoutes);
-  app.use('/api/flash-sales', flashSaleRoutes);
-  app.use('/api/categories', categoriesRoutes);
+  // Initialiser les fichiers de données
+  const fs = require('fs');
+  const path = require('path');
+
+  const dataFiles = [
+    'users.json',
+    'products.json',
+    'panier.json',
+    'favorites.json',
+    'orders.json',
+    'contacts.json',
+    'client-chat.json',
+    'admin-chat.json',
+    'preferences.json',
+    'reviews.json',
+    'reset-codes.json',
+    'publayout.json',
+    'remboursements.json',
+    'banniereflashsale.json',
+    'categories.json',
+    'visitors.json',
+    'sales-notifications.json',
+  ];
+
+  const dataDir = path.join(__dirname, '../data');
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir);
+  }
+
+  dataFiles.forEach(file => {
+    const filePath = path.join(dataDir, file);
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, JSON.stringify([]));
+    }
+  });
+
+  // Routes principales
+  app.use('/api/auth', require('../routes/auth'));
+  app.use('/api/products', require('../routes/products'));
+  app.use('/api/categories', require('../routes/categories'));
+  app.use('/api/panier', require('../routes/panier'));
+  app.use('/api/favorites', require('../routes/favorites'));
+  app.use('/api/orders', require('../routes/orders'));
+  app.use('/api/contacts', require('../routes/contacts'));
+  app.use('/api/users', require('../routes/users'));
+  app.use('/api/reviews', require('../routes/reviews'));
+  app.use('/api/flash-sales', require('../routes/flash-sales'));
+  app.use('/api/pub-layout', require('../routes/pub-layout'));
+  app.use('/api/code-promos', require('../routes/code-promos'));
+  app.use('/api/remboursements', require('../routes/remboursements'));
+  app.use('/api/client-chat', require('../routes/client-chat'));
+  app.use('/api/admin-chat', require('../routes/admin-chat'));
+  app.use('/api/visitors', require('../routes/visitors'));
+  app.use('/api/sales-notifications', require('../routes/sales-notifications'));
 };
 
 module.exports = setupRoutes;
