@@ -1,4 +1,31 @@
-
 [
- 
+  {
+    "daily": {
+      "date": "2025-06-04",
+      "count": 4,
+      "uniqueVisitors": [
+        "visitor_1749046995570_kxt0pbaty",
+        "visitor_1749047013511_b75xiptce",
+        "visitor_1749047013513_yt6omeacc",
+        "visitor_1749047013514_2qif68miw"
+      ]
+    },
+    "weekly": {
+      "week": 23,
+      "year": 2025,
+      "count": 4
+    },
+    "monthly": {
+      "month": 5,
+      "year": 2025,
+      "count": 4
+    },
+    "yearly": {
+      "year": 2025,
+      "count": 4
+    },
+    "currentViewing": 0,
+    "lastVisit": "2025-06-04T14:23:15.570Z",
+    "onlineUsers": []
+  }
 ]
