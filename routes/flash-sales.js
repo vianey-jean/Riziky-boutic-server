@@ -168,48 +168,26 @@ router.get('/banniere-products', apiLimiter, checkFileExists, (req, res) => {
   }
 });
 
-// Obtenir la vente flash active - ROUTE CORRIGÉE
-router.get('/active', checkFileExists, (req, res) => {
+// Obtenir la vente flash active
+router.get('/active', apiLimiter, checkFileExists, (req, res) => {
   try {
-    console.log('🔍 Recherche de vente flash active...');
+    cleanExpiredFlashSales(); // Nettoyer avant de récupérer
     
-    if (!fs.existsSync(flashSalesFilePath)) {
-      console.log('❌ Fichier flash-sales.json non trouvé');
-      return res.status(404).json({ message: 'Aucune vente flash active' });
-    }
-
-    const flashSales = JSON.parse(fs.readFileSync(flashSalesFilePath, 'utf8'));
-    console.log('📊 Ventes flash trouvées:', flashSales.length);
-    
+    const flashSales = JSON.parse(fs.readFileSync(flashSalesFilePath));
     const now = new Date();
-    console.log('🕒 Date actuelle:', now.toISOString());
     
-    // Trouver la vente flash active
-    const activeFlashSale = flashSales.find(sale => {
-      const isActive = sale.isActive === true;
-      const startDate = new Date(sale.startDate);
-      const endDate = new Date(sale.endDate);
-      const isInDateRange = startDate <= now && endDate > now;
-      
-      console.log(`🔍 Vérification vente flash "${sale.title}":`, {
-        isActive,
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-        isInDateRange
-      });
-      
-      return isActive && isInDateRange;
-    });
+    const activeFlashSale = flashSales.find(sale => 
+      sale.isActive && 
+      new Date(sale.startDate) <= now && 
+      new Date(sale.endDate) > now
+    );
     
     if (!activeFlashSale) {
-      console.log('❌ Aucune vente flash active trouvée');
       return res.status(404).json({ message: 'Aucune vente flash active' });
     }
     
-    console.log('✅ Vente flash active trouvée:', activeFlashSale.title);
     res.json(activeFlashSale);
   } catch (error) {
-    console.error('❌ Erreur lors de la récupération de la vente flash active:', error);
     res.status(500).json({ message: 'Erreur lors de la récupération de la vente flash active' });
   }
 });

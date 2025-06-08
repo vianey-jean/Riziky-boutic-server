@@ -1,3 +1,32 @@
 [
-  
+  {
+    "daily": {
+      "date": "2025-06-07",
+      "count": 5,
+      "uniqueVisitors": [
+        "::ffff:127.0.0.1_TW96aWxsYS81LjAgKFdp",
+        "visitor_1749270777890_eddx8nmhi",
+        "visitor_1749270806500_kbngcsclo",
+        "visitor_1749270806502_a38ib4qbf",
+        "visitor_1749270835120_wjpdvrppp"
+      ]
+    },
+    "weekly": {
+      "week": 23,
+      "year": 2025,
+      "count": 5
+    },
+    "monthly": {
+      "month": 5,
+      "year": 2025,
+      "count": 5
+    },
+    "yearly": {
+      "year": 2025,
+      "count": 5
+    },
+    "currentViewing": 2,
+    "lastVisit": "2025-06-07T04:32:54.826Z",
+    "onlineUsers": []
+  }
 ]
