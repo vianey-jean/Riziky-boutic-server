@@ -1,3 +1,4 @@
+
 {
   "name": "Riziky-Agendas-server",
   "version": "2.1.0",
@@ -5,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "data-sync": "node -e \"require('./services/dataSync.service').syncData()\""
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

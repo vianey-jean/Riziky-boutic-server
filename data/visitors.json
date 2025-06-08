@@ -1,32 +1,58 @@
 [
   {
     "daily": {
-      "date": "2025-06-07",
-      "count": 5,
+      "date": "2025-06-08",
+      "count": 31,
       "uniqueVisitors": [
+        "visitor_1749419586822_6dt98ipyp",
         "::ffff:127.0.0.1_TW96aWxsYS81LjAgKFdp",
-        "visitor_1749270777890_eddx8nmhi",
-        "visitor_1749270806500_kbngcsclo",
-        "visitor_1749270806502_a38ib4qbf",
-        "visitor_1749270835120_wjpdvrppp"
+        "visitor_1749419610496_9dexeewjf",
+        "visitor_1749419610497_3eb9myljq",
+        "visitor_1749419634179_wj2v38qai",
+        "visitor_1749419657852_2r5h4g9vq",
+        "visitor_1749419681526_azi2wpb7s",
+        "visitor_1749419681527_hth19flde",
+        "visitor_1749419681529_00mry5nfs",
+        "visitor_1749419705201_byx3r76d5",
+        "visitor_1749419705203_1ofqfu5ps",
+        "visitor_1749419705205_vk8ddszfv",
+        "visitor_1749419728882_zwlkp9nvx",
+        "visitor_1749419728885_k91nrjsss",
+        "visitor_1749419752564_7j2uem16n",
+        "visitor_1749419776238_2dzqnnrko",
+        "visitor_1749419776240_9ifz4frer",
+        "visitor_1749419776241_ntd7y8toz",
+        "visitor_1749419799917_2adqj1wo0",
+        "visitor_1749419799919_1zj4jgot1",
+        "visitor_1749419799920_kb5po4a8c",
+        "visitor_1749419823602_4djje60xu",
+        "visitor_1749419847285_g6ddz2rtq",
+        "visitor_1749419870968_xzq9r881c",
+        "visitor_1749419870969_ckxk39uii",
+        "visitor_1749419894649_736zrsh4f",
+        "visitor_1749419894650_aad7srr0a",
+        "visitor_1749419918322_43m8wd47r",
+        "visitor_1749419918324_gntkujw36",
+        "visitor_1749419942008_4mu53b6lg",
+        "visitor_1749419942010_87y21pzhb"
       ]
     },
     "weekly": {
-      "week": 23,
+      "week": 24,
       "year": 2025,
-      "count": 5
+      "count": 30
     },
     "monthly": {
       "month": 5,
       "year": 2025,
-      "count": 5
+      "count": 36
     },
     "yearly": {
       "year": 2025,
-      "count": 5
+      "count": 36
     },
     "currentViewing": 2,
-    "lastVisit": "2025-06-07T04:32:54.826Z",
+    "lastVisit": "2025-06-08T21:57:01.095Z",
     "onlineUsers": []
   }
 ]

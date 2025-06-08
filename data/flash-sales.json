@@ -1,15 +1,18 @@
 [
   {
-    "id": "1748532814253",
-    "title": "Ventes flash Iphone 13 pro max",
-    "description": "Ventes iphone 13 prox max",
-    "discount": 30,
-    "startDate": "2025-05-29T00:00",
-    "endDate": "2025-06-05T23:59",
+    "id": "test-flash-sale-2025",
+    "title": "🔥 VENTE FLASH - 50% sur tout !",
+    "description": "Profitez de notre vente flash exceptionnelle avec 50% de réduction sur une sélection de produits premium",
+    "discount": 50,
+    "startDate": "2025-06-06T00:00",
+    "endDate": "2025-12-31T23:59",
     "productIds": [
+      "1746726531059",
+      "1746760831010",
+      "1746760545081",
       "1748532716997"
     ],
     "isActive": true,
-    "createdAt": "2025-05-29T15:33:34.253Z"
+    "createdAt": "2025-06-06T08:00:00.000Z"
   }
 ]
