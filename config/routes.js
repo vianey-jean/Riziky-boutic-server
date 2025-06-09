@@ -1,4 +1,3 @@
-
 const { initializeDataFiles } = require('./dataFiles');
 
 const setupRoutes = (app) => {
@@ -56,6 +55,7 @@ const setupRoutes = (app) => {
   app.use('/api/admin-chat', require('../routes/admin-chat'));
   app.use('/api/visitors', require('../routes/visitors'));
   app.use('/api/sales-notifications', require('../routes/sales-notifications'));
+  app.use('/api/site-settings', require('../routes/site-settings'));
 };
 
 module.exports = setupRoutes;

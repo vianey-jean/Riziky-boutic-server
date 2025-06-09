@@ -1,0 +1,88 @@
+{
+  "general": {
+    "siteName": "Mon E-commerce",
+    "siteDescription": "Votre boutique en ligne de confiance",
+    "companyName": "Ma Société E-commerce",
+    "contactEmail": "contact@monsite.com",
+    "supportEmail": "support@monsite.com",
+    "phone": "+33 1 23 45 67 89",
+    "address": "123 Rue du Commerce, 75001 Paris",
+    "language": "fr",
+    "currency": "EUR",
+    "timezone": "Europe/Paris"
+  },
+  "appearance": {
+    "theme": "modern",
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#10B981",
+    "accentColor": "#F59E0B",
+    "logoUrl": "/images/logo/logo.png",
+    "faviconUrl": "/favicon.ico",
+    "bannerEnabled": true,
+    "bannerText": "Livraison gratuite à partir de 50€",
+    "headerStyle": "modern",
+    "footerStyle": "detailed"
+  },
+  "ecommerce": {
+    "taxRate": 20,
+    "shippingFee": 5.99,
+    "freeShippingThreshold": 50,
+    "enableReviews": true,
+    "enableWishlist": true,
+    "enableCompare": true,
+    "stockManagement": true,
+    "autoReduceStock": true,
+    "lowStockThreshold": 5,
+    "outOfStockBehavior": "hide"
+  },
+  "payment": {
+    "enableCreditCard": true,
+    "enablePaypal": true,
+    "enableBankTransfer": true,
+    "enableCash": false,
+    "stripeEnabled": false,
+    "stripePublicKey": "",
+    "paypalEnabled": false,
+    "paypalClientId": ""
+  },
+  "shipping": {
+    "enableFreeShipping": true,
+    "enableExpressDelivery": true,
+    "expressDeliveryFee": 9.99,
+    "estimatedDeliveryDays": 3,
+    "enableInternationalShipping": false,
+    "internationalShippingFee": 15.99
+  },
+  "notifications": {
+    "enableEmailNotifications": true,
+    "enableOrderConfirmation": true,
+    "enableShippingNotifications": true,
+    "enablePromotionalEmails": true,
+    "enableSmsNotifications": false,
+    "enablePushNotifications": false
+  },
+  "seo": {
+    "metaTitle": "Mon E-commerce - Votre boutique en ligne",
+    "metaDescription": "Découvrez notre large gamme de produits de qualité avec livraison rapide",
+    "metaKeywords": "e-commerce, boutique en ligne, produits, livraison",
+    "googleAnalyticsId": "",
+    "facebookPixelId": "",
+    "enableSitemap": true,
+    "enableRobotsTxt": true
+  },
+  "security": {
+    "enableSSL": true,
+    "enableCaptcha": false,
+    "captchaSiteKey": "",
+    "enableTwoFactorAuth": false,
+    "sessionTimeout": 24,
+    "passwordMinLength": 8,
+    "enableLoginAttemptLimit": true,
+    "maxLoginAttempts": 5
+  },
+  "system": {
+    "registrationEnabled": false,
+    "maintenanceMode": false,
+    "maintenanceMessage": "Site en maintenance. Nous serons de retour très bientôt !"
+  }
+}

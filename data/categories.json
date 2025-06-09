@@ -3,19 +3,19 @@
     "id": "1",
     "name": "perruques",
     "description": "Perruques de qualité",
-    "order": 2,
+    "order": 1,
     "isActive": true,
     "createdAt": "2025-05-28T00:00:00.000Z",
-    "updatedAt": "2025-05-28T05:10:05.865Z"
+    "updatedAt": "2025-06-09T07:56:23.450Z"
   },
   {
     "id": "2",
     "name": "tissages",
     "description": "Tissages et extensions",
-    "order": 1,
+    "order": 2,
     "isActive": true,
     "createdAt": "2025-05-28T00:00:00.000Z",
-    "updatedAt": "2025-05-28T05:10:02.539Z"
+    "updatedAt": "2025-06-09T07:56:27.166Z"
   },
   {
     "id": "3",
@@ -40,13 +40,5 @@
     "order": 5,
     "isActive": true,
     "createdAt": "2025-05-28T00:00:00.000Z"
-  },
-  {
-    "id": "1748409055615",
-    "name": "Tech",
-    "description": "téléphonie",
-    "order": 6,
-    "isActive": true,
-    "createdAt": "2025-05-28T05:10:55.615Z"
   }
 ]
