@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
@@ -12,6 +11,35 @@ const preferencesFilePath = path.join(__dirname, '../data/preferences.json');
 if (!fs.existsSync(preferencesFilePath)) {
   fs.writeFileSync(preferencesFilePath, JSON.stringify([], null, 2));
 }
+
+// Endpoint public pour vérifier un email et retourner le rôle (pour maintenance login)
+router.post('/check-email-role', (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ message: 'Email requis' });
+    }
+    
+    const users = JSON.parse(fs.readFileSync(usersFilePath));
+    const user = users.find(u => u.email === email);
+    
+    if (user) {
+      res.json({ 
+        exists: true, 
+        role: user.role,
+        email: user.email 
+      });
+    } else {
+      res.json({ 
+        exists: false 
+      });
+    }
+  } catch (error) {
+    console.error('Erreur lors de la vérification de l\'email:', error);
+    res.status(500).json({ message: 'Erreur lors de la vérification de l\'email' });
+  }
+});
 
 // Obtenir tous les utilisateurs (admin seulement)
 router.get('/', isAuthenticated, isAdmin, (req, res) => {

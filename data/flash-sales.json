@@ -1,18 +1,15 @@
 [
   {
-    "id": "test-flash-sale-2025",
-    "title": "🔥 VENTE FLASH - 50% sur tout !",
-    "description": "Profitez de notre vente flash exceptionnelle avec 50% de réduction sur une sélection de produits premium",
-    "discount": 50,
-    "startDate": "2025-06-06T00:00",
-    "endDate": "2025-12-31T23:59",
+    "id": "1749455702792",
+    "title": "Ventes flash Iphone",
+    "description": "Ventes",
+    "discount": 30,
+    "startDate": "2025-06-09T11:54",
+    "endDate": "2025-06-28T11:54",
     "productIds": [
-      "1746726531059",
-      "1746760831010",
-      "1746760545081",
       "1748532716997"
     ],
     "isActive": true,
-    "createdAt": "2025-06-06T08:00:00.000Z"
+    "createdAt": "2025-06-09T07:55:02.792Z"
   }
 ]

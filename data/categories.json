@@ -40,5 +40,13 @@
     "order": 5,
     "isActive": true,
     "createdAt": "2025-05-28T00:00:00.000Z"
+  },
+  {
+    "id": "1749551768543",
+    "name": "Tech",
+    "description": "Téléphone & Information",
+    "order": 6,
+    "isActive": true,
+    "createdAt": "2025-06-10T10:36:08.543Z"
   }
 ]

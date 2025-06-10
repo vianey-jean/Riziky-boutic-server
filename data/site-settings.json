@@ -81,8 +81,8 @@
     "maxLoginAttempts": 5
   },
   "system": {
-    "registrationEnabled": false,
+    "registrationEnabled": true,
     "maintenanceMode": false,
-    "maintenanceMessage": "Site en maintenance. Nous serons de retour très bientôt !"
+    "maintenanceMessage": "Site en maintenance., seule les Administrateur peut se connecter. Nous serons de retour très bientôt !"
   }
 }
