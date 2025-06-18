@@ -1,15 +1,37 @@
 [
   {
-    "id": "1749455702792",
-    "title": "Ventes flash Iphone",
-    "description": "Ventes",
+    "id": "1750217143149",
+    "title": "Vente Iphone",
+    "description": "Ventes iphone 13 pro Max",
     "discount": 30,
-    "startDate": "2025-06-09T11:54",
-    "endDate": "2025-06-28T11:54",
+    "startDate": "2025-06-18T00:00",
+    "endDate": "2025-06-19T00:00",
     "productIds": [
       "1748532716997"
     ],
     "isActive": true,
-    "createdAt": "2025-06-09T07:55:02.792Z"
+    "createdAt": "2025-06-18T03:25:43.149Z",
+    "backgroundColor": "#0d9488",
+    "icon": "Gem",
+    "emoji": "👑",
+    "order": 1
+  },
+  {
+    "id": "1750217258856",
+    "title": "Ventes du Jour",
+    "description": "ventes perruque",
+    "discount": 50,
+    "startDate": "2025-06-18T00:00",
+    "endDate": "2025-06-20T00:00",
+    "productIds": [
+      "1746726301725",
+      "1746726428072"
+    ],
+    "isActive": true,
+    "createdAt": "2025-06-18T03:27:38.856Z",
+    "backgroundColor": "#2563eb",
+    "icon": "Gift",
+    "emoji": "💎",
+    "order": 2
   }
 ]

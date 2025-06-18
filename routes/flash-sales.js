@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const { isAuthenticated, isAdmin } = require('../middlewares/auth');
@@ -40,17 +39,29 @@ const ensureDataIntegrity = (req, res, next) => {
   }
 };
 
-// Nettoyer les ventes flash expirées et régénérer la bannière toutes les heures
-const cleanupInterval = setInterval(() => {
+// Obtenir toutes les ventes flash actives (nouveau endpoint)
+router.get('/active-all', apiLimiter, ensureDataIntegrity, (req, res) => {
   try {
-    flashSaleService.cleanExpiredFlashSales();
-    flashSaleService.generateBanniereFlashSale();
+    console.log('🌐 Demande de toutes les ventes flash actives');
+    
+    const activeFlashSales = flashSaleService.getActiveFlashSales();
+    
+    if (!activeFlashSales || activeFlashSales.length === 0) {
+      console.log('ℹ️ Aucune vente flash active');
+      return res.status(404).json({ message: 'Aucune vente flash active' });
+    }
+    
+    console.log(`📦 Retour de ${activeFlashSales.length} ventes flash actives`);
+    res.json(activeFlashSales);
   } catch (error) {
-    console.error('Erreur lors du nettoyage automatique:', error);
+    console.error('💥 Erreur lors de la récupération des ventes flash actives:', error);
+    res.status(500).json({ 
+      message: 'Erreur lors de la récupération des ventes flash actives',
+      error: error.message 
+    });
   }
-}, 60 * 60 * 1000);
+});
 
-// Obtenir les produits de la bannière flash sale
 router.get('/banniere-products', apiLimiter, ensureDataIntegrity, (req, res) => {
   try {
     console.log('🌐 Demande des produits bannière flash sale');
@@ -155,7 +166,7 @@ router.get('/:id/products', apiLimiter, ensureDataIntegrity, (req, res) => {
 // Créer une nouvelle vente flash
 router.post('/', isAuthenticated, isAdmin, ensureDataIntegrity, (req, res) => {
   try {
-    const { title, description, discount, startDate, endDate, productIds } = req.body;
+    const { title, description, discount, startDate, endDate, productIds, backgroundColor, icon, emoji, order } = req.body;
     
     console.log('🌐 Création d\'une nouvelle vente flash:', { title, discount });
     
@@ -172,7 +183,11 @@ router.post('/', isAuthenticated, isAdmin, ensureDataIntegrity, (req, res) => {
       discount,
       startDate,
       endDate,
-      productIds
+      productIds,
+      backgroundColor,
+      icon,
+      emoji,
+      order
     });
     
     console.log('✅ Nouvelle vente flash créée:', newFlashSale.id);
@@ -292,5 +307,15 @@ process.on('SIGTERM', () => {
   clearInterval(cleanupInterval);
   process.exit(0);
 });
+
+// Nettoyer les ventes flash expirées et régénérer la bannière toutes les heures
+const cleanupInterval = setInterval(() => {
+  try {
+    flashSaleService.cleanExpiredFlashSales();
+    flashSaleService.generateBanniereFlashSale();
+  } catch (error) {
+    console.error('Erreur lors du nettoyage automatique:', error);
+  }
+}, 60 * 60 * 1000);
 
 module.exports = router;

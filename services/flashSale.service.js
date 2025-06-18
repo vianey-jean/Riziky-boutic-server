@@ -1,4 +1,3 @@
-
 const database = require('../core/database');
 const path = require('path');
 
@@ -35,6 +34,51 @@ class FlashSaleService {
     } catch (error) {
       console.error('Erreur lors de la recherche de vente flash:', error);
       return null;
+    }
+  }
+
+  getActiveFlashSales() {
+    try {
+      console.log('🔍 Recherche des ventes flash actives...');
+      
+      const flashSales = this.getAllFlashSales();
+      console.log('📦 Toutes les ventes flash:', flashSales);
+      
+      const now = new Date();
+      console.log('🕒 Date actuelle:', now.toISOString());
+      
+      const activeFlashSales = flashSales.filter(sale => {
+        console.log(`🔎 Vérification vente flash "${sale.title}":`);
+        console.log(`  - isActive: ${sale.isActive}`);
+        console.log(`  - startDate: ${sale.startDate}`);
+        console.log(`  - endDate: ${sale.endDate}`);
+        
+        const startDate = new Date(sale.startDate);
+        const endDate = new Date(sale.endDate);
+        
+        console.log(`  - startDate parsed: ${startDate.toISOString()}`);
+        console.log(`  - endDate parsed: ${endDate.toISOString()}`);
+        console.log(`  - Dans la période: ${startDate <= now && endDate > now}`);
+        
+        const isInPeriod = startDate <= now && endDate > now;
+        const isActive = sale.isActive && isInPeriod;
+        
+        console.log(`  - Résultat final: ${isActive}`);
+        
+        return isActive;
+      });
+      
+      console.log(`✅ ${activeFlashSales.length} ventes flash actives trouvées`);
+      
+      // Trier par ordre
+      const sortedFlashSales = activeFlashSales.sort((a, b) => (a.order || 999) - (b.order || 999));
+      
+      console.log('📋 Ventes flash actives triées:', sortedFlashSales.map(s => ({ id: s.id, title: s.title, order: s.order })));
+      
+      return sortedFlashSales;
+    } catch (error) {
+      console.error('💥 Erreur lors de la recherche des ventes flash actives:', error);
+      return [];
     }
   }
 
@@ -78,7 +122,11 @@ class FlashSaleService {
         endDate: data.endDate,
         productIds: processedProductIds,
         isActive: false,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        backgroundColor: data.backgroundColor || '',
+        icon: data.icon || '',
+        emoji: data.emoji || '',
+        order: parseInt(data.order) || 1
       };
       
       flashSales.push(newFlashSale);
@@ -107,6 +155,11 @@ class FlashSaleService {
         } else if (typeof updateData.productIds === 'object') {
           updateData.productIds = Object.values(updateData.productIds).map(id => String(id));
         }
+      }
+      
+      // Traiter les nouvelles propriétés
+      if (updateData.order) {
+        updateData.order = parseInt(updateData.order);
       }
       
       flashSales[index] = { ...flashSales[index], ...updateData };
@@ -140,9 +193,6 @@ class FlashSaleService {
   activateFlashSale(id) {
     try {
       const flashSales = this.getAllFlashSales();
-      
-      // Désactiver toutes les autres ventes flash
-      flashSales.forEach(sale => sale.isActive = false);
       
       // Activer la vente flash sélectionnée
       const index = flashSales.findIndex(sale => sale.id === id);
@@ -218,47 +268,55 @@ class FlashSaleService {
     try {
       console.log('🔄 Génération du fichier banniereflashsale.json...');
       
-      const activeFlashSale = this.getActiveFlashSale();
+      const activeFlashSales = this.getActiveFlashSales();
       
-      if (!activeFlashSale) {
+      if (!activeFlashSales || activeFlashSales.length === 0) {
         console.log('ℹ️ Aucune vente flash active trouvée');
         database.write(this.banniereFile, []);
         return [];
       }
       
-      console.log('✅ Vente flash active trouvée:', activeFlashSale.title);
+      console.log('✅ Ventes flash actives trouvées:', activeFlashSales.length);
       
       const allProducts = this.getProducts();
       console.log('📦 Nombre de produits dans la base:', allProducts.length);
       
-      const productIds = activeFlashSale.productIds.map(id => id.toString().trim());
-      console.log('🎯 IDs des produits à traiter:', productIds);
-      
       const banniereProducts = [];
       
-      productIds.forEach(targetId => {
-        const foundProduct = allProducts.find(product => 
-          product.id.toString().trim() === targetId
-        );
+      // Traiter chaque vente flash active
+      activeFlashSales.forEach(flashSale => {
+        const productIds = flashSale.productIds.map(id => id.toString().trim());
+        console.log(`🎯 IDs des produits à traiter pour ${flashSale.title}:`, productIds);
         
-        if (foundProduct) {
-          console.log(`✅ Produit trouvé: ${foundProduct.name}`);
+        productIds.forEach(targetId => {
+          const foundProduct = allProducts.find(product => 
+            product.id.toString().trim() === targetId
+          );
           
-          const banniereProduct = {
-            ...foundProduct,
-            flashSaleDiscount: activeFlashSale.discount,
-            flashSaleStartDate: activeFlashSale.startDate,
-            flashSaleEndDate: activeFlashSale.endDate,
-            flashSaleTitle: activeFlashSale.title,
-            flashSaleDescription: activeFlashSale.description,
-            originalFlashPrice: foundProduct.price,
-            flashSalePrice: +(foundProduct.price * (1 - activeFlashSale.discount / 100)).toFixed(2)
-          };
-          
-          banniereProducts.push(banniereProduct);
-        } else {
-          console.log(`❌ Aucun produit trouvé pour l'ID: ${targetId}`);
-        }
+          if (foundProduct) {
+            console.log(`✅ Produit trouvé: ${foundProduct.name}`);
+            
+            const banniereProduct = {
+              ...foundProduct,
+              flashSaleId: flashSale.id,
+              flashSaleDiscount: flashSale.discount,
+              flashSaleStartDate: flashSale.startDate,
+              flashSaleEndDate: flashSale.endDate,
+              flashSaleTitle: flashSale.title,
+              flashSaleDescription: flashSale.description,
+              flashSaleBackgroundColor: flashSale.backgroundColor,
+              flashSaleIcon: flashSale.icon,
+              flashSaleEmoji: flashSale.emoji,
+              flashSaleOrder: flashSale.order,
+              originalFlashPrice: foundProduct.price,
+              flashSalePrice: +(foundProduct.price * (1 - flashSale.discount / 100)).toFixed(2)
+            };
+            
+            banniereProducts.push(banniereProduct);
+          } else {
+            console.log(`❌ Aucun produit trouvé pour l'ID: ${targetId}`);
+          }
+        });
       });
       
       console.log(`📝 ${banniereProducts.length} produits ajoutés au fichier banniere`);
