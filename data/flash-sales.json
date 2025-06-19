@@ -5,7 +5,7 @@
     "description": "Ventes iphone 13 pro Max",
     "discount": 30,
     "startDate": "2025-06-18T00:00",
-    "endDate": "2025-06-19T00:00",
+    "endDate": "2026-12-31T00:00",
     "productIds": [
       "1748532716997"
     ],
@@ -22,7 +22,7 @@
     "description": "ventes perruque",
     "discount": 50,
     "startDate": "2025-06-18T00:00",
-    "endDate": "2025-06-20T00:00",
+    "endDate": "2029-06-31T00:00",
     "productIds": [
       "1746726301725",
       "1746726428072"
