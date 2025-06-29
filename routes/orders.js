@@ -1,3 +1,4 @@
+
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -33,6 +34,18 @@ function writeJSON(filePath, data) {
   }
 }
 
+// Fonction pour calculer les frais de livraison
+function calculateShippingCost(ville) {
+  const freeShippingZones = [
+    'Saint-Paul', 'Saint-Denis', 'Sainte-Marie', 'Sainte-Suzanne',
+    'Le Port', 'La Possession', 'Bras-Panon', 'Saint-André'
+  ];
+  
+  return freeShippingZones.some(zone => 
+    ville.toLowerCase().includes(zone.toLowerCase())
+  ) ? 0 : 25;
+}
+
 // Route pour obtenir toutes les commandes (pour l'admin)
 router.get('/', isAuthenticated, async (req, res) => {
   try {
@@ -61,7 +74,7 @@ router.post('/', isAuthenticated, async (req, res) => {
   console.log('Requête reçue pour créer une commande:', JSON.stringify(req.body));
   
   try {
-    const { items, shippingAddress, paymentMethod, codePromo } = req.body;
+    const { items, shippingAddress, paymentMethod, codePromo, taxRate = 0.20, deliveryPrice } = req.body;
 
     // Convertir les items de format objet à format tableau si nécessaire
     let itemsArray = items;
@@ -117,13 +130,16 @@ router.post('/', isAuthenticated, async (req, res) => {
     const orders = readJSON(ordersPath);
     const commandes = readJSON(commandesPath);
 
-    // Calculer le montant total
-    let totalAmount = enrichedItems.reduce((sum, item) => sum + item.subtotal, 0);
-    let originalAmount = totalAmount;
+    // Calculer le sous-total des produits
+    const subtotalProduits = enrichedItems.reduce((sum, item) => sum + item.subtotal, 0);
+    
+    // Calculer les frais de livraison
+    const fraisLivraison = deliveryPrice !== undefined ? deliveryPrice : calculateShippingCost(shippingAddress.ville);
     
     // Traitement du code promo si présent
     let codePromoUsed = null;
     let discount = 0;
+    let subtotalApresPromo = subtotalProduits;
     
     if (codePromo) {
       const codePromos = readJSON(codePromosPath);
@@ -136,9 +152,9 @@ router.post('/', isAuthenticated, async (req, res) => {
         const applicableItem = enrichedItems.find(item => item.productId === promo.productId);
         
         if (applicableItem) {
-          // Calculer la remise
+          // Calculer la remise sur le produit spécifique
           discount = (promo.pourcentage / 100) * applicableItem.subtotal;
-          totalAmount -= discount;
+          subtotalApresPromo = subtotalProduits - discount;
           
           // Mettre à jour le code promo (décrémenter la quantité)
           codePromos[promoIndex].quantite -= 1;
@@ -153,6 +169,12 @@ router.post('/', isAuthenticated, async (req, res) => {
         }
       }
     }
+    
+    // Calculer la TVA sur le sous-total après promotion
+    const tvaAmount = subtotalApresPromo * taxRate;
+    
+    // Calculer le total TTC
+    const totalTTC = subtotalApresPromo + tvaAmount + fraisLivraison;
 
     // Créer une nouvelle commande avec ID unique
     const orderId = `ORD-${Date.now()}`;
@@ -162,12 +184,22 @@ router.post('/', isAuthenticated, async (req, res) => {
       userName: `${req.user.nom} ${req.user.prenom || ''}`.trim(),
       userEmail: req.user.email,
       items: enrichedItems,
-      totalAmount,
-      originalAmount,
-      discount,
+      
+      // Détails financiers complets
+      subtotalProduits: subtotalProduits,
+      codePromoUsed,
+      discount: discount,
+      subtotalApresPromo: subtotalApresPromo,
+      taxRate: taxRate,
+      taxAmount: tvaAmount,
+      deliveryPrice: fraisLivraison,
+      totalAmount: totalTTC, // Total TTC final
+      
+      // Garder les anciens champs pour compatibilité
+      originalAmount: subtotalProduits,
+      
       shippingAddress,
       paymentMethod,
-      codePromoUsed,
       status: 'confirmée',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -189,13 +221,11 @@ router.post('/', isAuthenticated, async (req, res) => {
       const orderedItem = enrichedItems.find(item => item.productId === product.id);
       
       if (orderedItem) {
-        // Réduire le stock du produit
         const newStock = Math.max(0, product.stock - orderedItem.quantity);
-        
         return {
           ...product,
           stock: newStock,
-          isSold: newStock > 0 // Mettre à jour le statut de disponibilité
+          isSold: newStock > 0
         };
       }
       
@@ -207,10 +237,18 @@ router.post('/', isAuthenticated, async (req, res) => {
     
     if (!productsSaved) {
       console.error("Le stock des produits n'a pas pu être mis à jour");
-      // On ne bloque pas la commande pour autant, on continue
     }
     
     console.log('Commande créée avec succès:', orderId);
+    console.log('Détails financiers:', {
+      subtotalProduits,
+      discount,
+      subtotalApresPromo,
+      tvaAmount,
+      fraisLivraison,
+      totalTTC
+    });
+    
     res.status(201).json(newOrder);
   } catch (error) {
     console.error('Erreur lors de la création de la commande:', error);
