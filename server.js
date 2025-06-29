@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -45,7 +44,26 @@ app.use('/uploads', (req, res, next) => {
 app.use(sanitizeMiddleware);
 
 // Configuration des routes
-setupRoutes(app);
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/products', require('./routes/products'));
+app.use('/api/categories', require('./routes/categories'));
+app.use('/api/orders', require('./routes/orders'));
+app.use('/api/panier', require('./routes/panier'));
+app.use('/api/favorites', require('./routes/favorites'));
+app.use('/api/reviews', require('./routes/reviews'));
+app.use('/api/contacts', require('./routes/contacts'));
+app.use('/api/flash-sales', require('./routes/flash-sales'));
+app.use('/api/code-promos', require('./routes/code-promos'));
+app.use('/api/remboursements', require('./routes/remboursements'));
+app.use('/api/sales-notifications', require('./routes/sales-notifications'));
+app.use('/api/visitors', require('./routes/visitors'));
+app.use('/api/pub-layout', require('./routes/pub-layout'));
+app.use('/api/site-settings', require('./routes/site-settings'));
+app.use('/api/data-sync', require('./routes/data-sync'));
+app.use('/api/admin-chat', require('./routes/admin-chat'));
+app.use('/api/client-chat', require('./routes/client-chat'));
+app.use('/api/cards', require('./routes/cards'));
 
 // Initialiser Socket.io
 const io = initializeSocket(server);
