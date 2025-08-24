@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
@@ -57,7 +56,7 @@ router.post('/:userId/upload', isAuthenticated, upload.single('profileImage'), (
 
     const profileImagePath = `/uploads/profile-images/${req.file.filename}`;
 
-    // Mettre à jour l'utilisateur dans la base de données
+    // Mettre à jour l'utilisateur dans la base de données avec la NOUVELLE photo comme active
     const users = JSON.parse(fs.readFileSync(usersFilePath));
     const userIndex = users.findIndex(u => u.id === req.params.userId);
     
@@ -65,15 +64,14 @@ router.post('/:userId/upload', isAuthenticated, upload.single('profileImage'), (
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
-    // ✅ NE PLUS SUPPRIMER l'ancienne photo - juste définir la nouvelle comme photo active
+    // ✅ Définir la nouvelle photo uploadée comme photo active
     users[userIndex].profileImage = profileImagePath;
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
 
-    console.log('✅ Photo de profil mise à jour pour utilisateur:', req.params.userId);
-    console.log('🔗 Nouveau chemin:', profileImagePath);
+    console.log('✅ Nouvelle photo de profil définie comme active:', profileImagePath);
 
     res.json({ 
-      message: 'Photo de profil mise à jour avec succès',
+      message: 'Photo de profil ajoutée et définie comme active',
       profileImage: profileImagePath
     });
   } catch (error) {
@@ -124,7 +122,7 @@ router.put('/:userId/set-active', isAuthenticated, (req, res) => {
       return res.status(404).json({ message: 'Fichier image non trouvé' });
     }
 
-    // Mettre à jour l'utilisateur dans la base de données
+    // Mettre à jour l'utilisateur dans la base de données avec la photo SÉLECTIONNÉE comme active
     const users = JSON.parse(fs.readFileSync(usersFilePath));
     const userIndex = users.findIndex(u => u.id === req.params.userId);
     
@@ -132,14 +130,14 @@ router.put('/:userId/set-active', isAuthenticated, (req, res) => {
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
+    // ✅ Définir la photo sélectionnée comme photo active
     users[userIndex].profileImage = profileImagePath;
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
 
-    console.log('✅ Photo de profil active mise à jour pour utilisateur:', req.params.userId);
-    console.log('🔗 Chemin actif:', profileImagePath);
+    console.log('✅ Photo sélectionnée définie comme active:', profileImagePath);
 
     res.json({ 
-      message: 'Photo de profil active mise à jour avec succès',
+      message: 'Photo de profil active mise à jour',
       profileImage: profileImagePath
     });
   } catch (error) {
