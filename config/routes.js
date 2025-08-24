@@ -1,3 +1,4 @@
+
 const { initializeDataFiles } = require('./dataFiles');
 
 const setupRoutes = (app) => {
@@ -46,6 +47,7 @@ const setupRoutes = (app) => {
   app.use('/api/orders', require('../routes/orders'));
   app.use('/api/contacts', require('../routes/contacts'));
   app.use('/api/users', require('../routes/users'));
+  app.use('/api/profile-images', require('../routes/profile-images'));
   app.use('/api/reviews', require('../routes/reviews'));
   app.use('/api/flash-sales', require('../routes/flash-sales'));
   app.use('/api/pub-layout', require('../routes/pub-layout'));
