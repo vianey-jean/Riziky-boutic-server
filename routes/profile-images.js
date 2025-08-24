@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, `profile-${uniqueSuffix}${path.extname(file.originalname)}`);
+    cb(null, `profile-${req.params.userId}-${uniqueSuffix}${path.extname(file.originalname)}`);
   }
 });
 
@@ -65,19 +65,7 @@ router.post('/:userId/upload', isAuthenticated, upload.single('profileImage'), (
       return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
-    // Supprimer l'ancienne photo de profil s'il y en a une
-    if (users[userIndex].profileImage) {
-      const oldImagePath = path.join(__dirname, '..', users[userIndex].profileImage);
-      if (fs.existsSync(oldImagePath)) {
-        try {
-          fs.unlinkSync(oldImagePath);
-          console.log('🗑️ Ancienne photo supprimée:', oldImagePath);
-        } catch (error) {
-          console.log('⚠️ Impossible de supprimer l\'ancienne photo:', error.message);
-        }
-      }
-    }
-
+    // ✅ NE PLUS SUPPRIMER l'ancienne photo - juste définir la nouvelle comme photo active
     users[userIndex].profileImage = profileImagePath;
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
 
@@ -102,16 +90,61 @@ router.get('/:userId/list', isAuthenticated, (req, res) => {
       return res.status(403).json({ message: 'Accès non autorisé' });
     }
 
-    // Lister tous les fichiers de profil dans le dossier uploads
+    // Lister tous les fichiers de profil de cet utilisateur dans le dossier uploads
     const files = fs.readdirSync(uploadsDir);
     const profileImages = files
-      .filter(file => file.startsWith('profile-'))
-      .map(file => `/uploads/profile-images/${file}`);
+      .filter(file => file.startsWith(`profile-${req.params.userId}-`))
+      .map(file => `/uploads/profile-images/${file}`)
+      .sort((a, b) => b.localeCompare(a)); // Trier par nom décroissant (plus récent en premier)
 
     res.json(profileImages);
   } catch (error) {
     console.error('Erreur lors de la récupération des photos:', error);
     res.status(500).json({ message: 'Erreur lors de la récupération des photos' });
+  }
+});
+
+// Définir une photo existante comme photo de profil active
+router.put('/:userId/set-active', isAuthenticated, (req, res) => {
+  try {
+    const { profileImagePath } = req.body;
+    
+    if (!profileImagePath) {
+      return res.status(400).json({ message: 'Chemin de l\'image requis' });
+    }
+
+    // Vérifier que l'utilisateur modifie sa propre photo ou est admin
+    if (req.user.id !== req.params.userId && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Accès non autorisé' });
+    }
+
+    // Vérifier que le fichier existe
+    const filePath = path.join(__dirname, '..', profileImagePath);
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: 'Fichier image non trouvé' });
+    }
+
+    // Mettre à jour l'utilisateur dans la base de données
+    const users = JSON.parse(fs.readFileSync(usersFilePath));
+    const userIndex = users.findIndex(u => u.id === req.params.userId);
+    
+    if (userIndex === -1) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    users[userIndex].profileImage = profileImagePath;
+    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+
+    console.log('✅ Photo de profil active mise à jour pour utilisateur:', req.params.userId);
+    console.log('🔗 Chemin actif:', profileImagePath);
+
+    res.json({ 
+      message: 'Photo de profil active mise à jour avec succès',
+      profileImage: profileImagePath
+    });
+  } catch (error) {
+    console.error('❌ Erreur lors de la mise à jour:', error);
+    res.status(500).json({ message: 'Erreur lors de la mise à jour de la photo: ' + error.message });
   }
 });
 
