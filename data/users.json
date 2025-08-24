@@ -30,7 +30,7 @@
     "pays": "La Réunion",
     "telephone": "0692198701",
     "genre": "homme",
-    "profileImage": "/uploads/profile-images/profile-1756044948487-365165889.JPG"
+    "profileImage": "/uploads/profile-images/profile-3-1756052982469-721620463.webp"
   },
   {
     "id": "4",
@@ -53,6 +53,7 @@
     "email": "service.client@example.com",
     "password": "$2b$10$nzcvstehH8wpRt.lp7vAe.664TrgMe8m2wZGfAQeMvTQibAGpUezG",
     "role": "admin",
-    "dateCreation": "2025-04-26T10:00:00.000Z"
+    "dateCreation": "2025-04-26T10:00:00.000Z",
+    "profileImage": "/uploads/profile-images/profile-5-1756053099195-189475308.webp"
   }
 ]

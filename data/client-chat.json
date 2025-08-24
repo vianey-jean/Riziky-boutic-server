@@ -19,12 +19,36 @@
         "5"
       ],
       "type": "service"
+    },
+    "client-5-service": {
+      "messages": [
+        {
+          "id": "msg-auto-1756053082337",
+          "senderId": "system",
+          "content": "Bienvenue dans notre service client en ligne. Un conseiller va vous répondre dans les plus brefs délais. Comment pouvons-nous vous aider?",
+          "timestamp": "2025-08-24T16:31:22.337Z",
+          "read": false,
+          "isSystemMessage": true
+        }
+      ],
+      "participants": [
+        "5",
+        "1",
+        "3",
+        "4",
+        "5"
+      ],
+      "type": "service"
     }
   },
   "onlineUsers": {
     "3": {
       "isOnline": true,
-      "lastSeen": "2025-08-24T14:16:56.317Z"
+      "lastSeen": "2025-08-24T16:29:51.809Z"
+    },
+    "5": {
+      "isOnline": true,
+      "lastSeen": "2025-08-24T16:31:40.446Z"
     }
   },
   "autoReplySent": {},

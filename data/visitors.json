@@ -2,7 +2,7 @@
   {
     "daily": {
       "date": "2025-08-24",
-      "count": 14,
+      "count": 60,
       "uniqueVisitors": [
         "visitor_1756044905983_2lcpl0rda",
         "visitor_1756044905986_6ppjrwsfl",
@@ -17,25 +17,71 @@
         "visitor_1756044991406_h8p2rrlix",
         "visitor_1756045019878_kmxpii0ad",
         "visitor_1756045019881_mfvgqdr2v",
-        "visitor_1756045019883_mot0ipdli"
+        "visitor_1756045019883_mot0ipdli",
+        "visitor_1756052628919_455ao6o0p",
+        "visitor_1756052628924_y3jibr2x3",
+        "visitor_1756052654433_hacndz6rr",
+        "visitor_1756052679949_uogk7gqfz",
+        "visitor_1756052679951_4xg9cptsn",
+        "visitor_1756052705475_swrl8kmw8",
+        "visitor_1756052705476_bov7x9rh7",
+        "visitor_1756052705478_i2sflmj62",
+        "visitor_1756052730991_yv3s02dyq",
+        "visitor_1756052730993_cy9wjb68e",
+        "visitor_1756052730995_anis035wk",
+        "visitor_1756052756510_9hqur64ll",
+        "visitor_1756052756512_niyi5lpvx",
+        "visitor_1756052756513_0elo6ydd1",
+        "visitor_1756052782037_ugdkdhpix",
+        "visitor_1756052782040_n9olv9kub",
+        "visitor_1756052782041_jbozkifjb",
+        "visitor_1756052807553_zeh52v08r",
+        "visitor_1756052807556_94zd2lui0",
+        "visitor_1756052833069_o62k60tr0",
+        "visitor_1756052833071_pwg2sph3v",
+        "visitor_1756052833073_8tjitrdzk",
+        "visitor_1756052858586_ck2rig4uy",
+        "visitor_1756052858587_eh37x1xp4",
+        "visitor_1756052884101_au4exs3i6",
+        "visitor_1756052884103_4pbz2o06b",
+        "visitor_1756052909628_tdckcvd5r",
+        "visitor_1756052935147_q0fdqnw8x",
+        "visitor_1756052935148_mtm7yzbip",
+        "visitor_1756052960673_yokdog64q",
+        "visitor_1756052960674_l3a3ysd5u",
+        "visitor_1756052960675_271rtmd3g",
+        "visitor_1756052986192_42cvscwj9",
+        "visitor_1756052986194_nv559qlmi",
+        "visitor_1756052986195_ilhwqzayf",
+        "visitor_1756053011710_j7hylqiwl",
+        "visitor_1756053011712_p4xqawi8k",
+        "visitor_1756053011713_0p62t29r7",
+        "visitor_1756053037233_5gjczs40d",
+        "visitor_1756053062748_0jt3d9lrj",
+        "visitor_1756053062750_aosxmwd8b",
+        "visitor_1756053062751_yf7pf1gy7",
+        "visitor_1756053088277_z7yenvr0w",
+        "visitor_1756053088278_h81whi2il",
+        "visitor_1756053088280_yjgbol336",
+        "visitor_1756053113794_ynlk121mb"
       ]
     },
     "weekly": {
       "week": 34,
       "year": 2025,
-      "count": 9
+      "count": 55
     },
     "monthly": {
       "month": 7,
       "year": 2025,
-      "count": 9
+      "count": 55
     },
     "yearly": {
       "year": 2025,
-      "count": 243
+      "count": 289
     },
-    "currentViewing": 1,
-    "lastVisit": "2025-08-24T14:16:46.395Z",
+    "currentViewing": 4,
+    "lastVisit": "2025-08-24T16:31:26.207Z",
     "onlineUsers": []
   }
 ]
