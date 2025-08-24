@@ -94,6 +94,7 @@ app.use('/api/data-sync', require('./routes/data-sync'));
 app.use('/api/admin-chat', require('./routes/admin-chat'));
 app.use('/api/client-chat', require('./routes/client-chat'));
 app.use('/api/cards', require('./routes/cards'));
+app.use('/api/profile-images', require('./routes/profile-images'));
 
 // ✅ Route test
 app.get('/api/test', (req, res) => {
