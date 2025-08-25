@@ -1,3 +1,4 @@
+
 /**
  * 🚀 server.js
  *
@@ -30,13 +31,15 @@ const server = createServer(app);
 // 📂 Préparer les dossiers d'uploads
 const uploadsDir = path.join(__dirname, 'uploads');
 const profileImagesDir = path.join(uploadsDir, 'profile-images');
+const chatFilesDir = path.join(uploadsDir, 'chat-files');
+const chatAudioDir = path.join(uploadsDir, 'chat-audio');
+const chatVideoDir = path.join(uploadsDir, 'chat-video');
 
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-if (!fs.existsSync(profileImagesDir)) {
-  fs.mkdirSync(profileImagesDir, { recursive: true });
-}
+[uploadsDir, profileImagesDir, chatFilesDir, chatAudioDir, chatVideoDir].forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
 
 // ⚙️ Multer configuration (pour upload photos)
 const storage = multer.diskStorage({
@@ -95,6 +98,7 @@ app.use('/api/admin-chat', require('./routes/admin-chat'));
 app.use('/api/client-chat', require('./routes/client-chat'));
 app.use('/api/cards', require('./routes/cards'));
 app.use('/api/profile-images', require('./routes/profile-images'));
+app.use('/api/chat-files', require('./routes/chat-files'));
 
 // ✅ Route test
 app.get('/api/test', (req, res) => {
@@ -125,4 +129,7 @@ const PORT = process.env.PORT || 10000;
 server.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur le port ${PORT}`);
   console.log(`📂 Uploads directory: ${uploadsDir}`);
+  console.log(`📁 Chat files directory: ${chatFilesDir}`);
+  console.log(`🎵 Chat audio directory: ${chatAudioDir}`);
+  console.log(`🎬 Chat video directory: ${chatVideoDir}`);
 });
