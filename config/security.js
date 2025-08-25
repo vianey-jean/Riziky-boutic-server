@@ -4,7 +4,20 @@ const xssClean = require('xss-clean');
 
 const securityMiddlewares = [
   helmet({ 
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "https:", "blob:"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        connectSrc: ["'self'", "https:", "wss:", "ws:"],
+        frameSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'", "data:", "blob:", "mediastream:", "https:"],
+        workerSrc: ["'self'", "blob:"]
+      }
+    },
     crossOriginResourcePolicy: { policy: 'cross-origin' }
   }),
   xssClean()
@@ -24,19 +37,18 @@ const sanitizeMiddleware = (req, res, next) => {
     const keys = Object.keys(req.params);
     for (let key of keys) {
       req.params[key] = req.params[key]
-        .replace(/[<>]/g, '') // Supprimer les balises HTML
+        .replace(/[<>]/g, '')
         .trim();
     }
   }
   
-  // Vérifier et nettoyer le corps de la requête
   if (req.body && typeof req.body === 'object') {
     const sanitize = (obj) => {
       const sanitized = {};
       for (const [key, value] of Object.entries(obj)) {
         if (typeof value === 'string') {
           sanitized[key] = value
-            .replace(/[<>]/g, '') // Supprimer les balises HTML
+            .replace(/[<>]/g, '')
             .trim();
         } else if (typeof value === 'object' && value !== null) {
           sanitized[key] = sanitize(value);
@@ -47,7 +59,6 @@ const sanitizeMiddleware = (req, res, next) => {
       return sanitized;
     };
 
-    // Ne pas sanitizer les fichiers ou données binaires
     if (!req.is('multipart/form-data')) {
       req.body = sanitize(req.body);
     }
