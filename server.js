@@ -120,6 +120,9 @@ app.post('/api/upload/profile', upload.single('image'), (req, res) => {
 // ⚡ Initialiser Socket.io
 const io = initializeSocket(server);
 
+// Rendre io disponible pour les routes
+app.set('io', io);
+
 // ❌ Gestion des erreurs
 app.use(notFoundHandler);
 app.use(globalErrorHandler);

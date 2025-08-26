@@ -237,6 +237,20 @@ router.post('/', isAuthenticated, async (req, res) => {
     
     if (!productsSaved) {
       console.error("Le stock des produits n'a pas pu être mis à jour");
+    } else {
+      // Notifier tous les clients des changements de stock
+      const io = req.app.get('io');
+      if (io) {
+        enrichedItems.forEach(item => {
+          const updatedProduct = updatedProducts.find(p => p.id === item.productId);
+          if (updatedProduct) {
+            io.emit('stock-updated', { 
+              productId: updatedProduct.id, 
+              stock: updatedProduct.stock 
+            });
+          }
+        });
+      }
     }
     
     console.log('Commande créée avec succès:', orderId);

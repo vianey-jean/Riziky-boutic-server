@@ -6,6 +6,7 @@ const {
   handleVideoCallEvents,
   handleChatEvents,
   handleOrderEvents,
+  handleStockEvents,
   handleUtilityEvents,
   handleDisconnection
 } = require('./socketHandlers');
@@ -34,6 +35,7 @@ const initializeSocket = (server) => {
     handleVideoCallEvents(socket, io);
     handleChatEvents(socket, io);
     handleOrderEvents(socket, io);
+    handleStockEvents(socket, io);
     handleUtilityEvents(socket, io);
     handleDisconnection(socket, io);
   });

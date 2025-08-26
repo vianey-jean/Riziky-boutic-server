@@ -171,6 +171,14 @@ const handleOrderEvents = (socket, io) => {
   });
 };
 
+const handleStockEvents = (socket, io) => {
+  // Notification de rupture de stock
+  socket.on('product-out-of-stock', (productId) => {
+    // Diffuser à tous les clients connectés
+    io.emit('stock-updated', { productId, stock: 0 });
+  });
+};
+
 const handleUtilityEvents = (socket, io) => {
   // Ping/Pong pour garder la connexion active
   socket.on('ping', () => {
@@ -208,6 +216,7 @@ module.exports = {
   handleVideoCallEvents,
   handleChatEvents,
   handleOrderEvents,
+  handleStockEvents,
   handleUtilityEvents,
   handleDisconnection
 };
