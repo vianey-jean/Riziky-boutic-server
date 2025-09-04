@@ -160,6 +160,80 @@ router.delete('/:id', isAuthenticated, isAdmin, (req, res) => {
   }
 });
 
+// Supprimer son propre profil avec vérification du mot de passe
+router.delete('/:id/profile', isAuthenticated, async (req, res) => {
+  try {
+    const { password } = req.body;
+    
+    if (!password) {
+      return res.status(400).json({ message: 'Mot de passe requis pour supprimer le profil' });
+    }
+    
+    // Vérifier que l'utilisateur supprime son propre profil
+    if (req.user.id !== req.params.id) {
+      return res.status(403).json({ message: 'Vous ne pouvez supprimer que votre propre profil' });
+    }
+    
+    const users = JSON.parse(fs.readFileSync(usersFilePath));
+    const user = users.find(u => u.id === req.params.id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+    
+    // Vérifier le mot de passe
+    let isPasswordValid;
+    
+    if (user.password.startsWith('$2')) {
+      isPasswordValid = await bcrypt.compare(password, user.password);
+    } else {
+      isPasswordValid = (user.password === password);
+    }
+    
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Mot de passe incorrect' });
+    }
+    
+    // Supprimer toutes les données liées à l'utilisateur
+    const userId = req.params.id;
+    
+    // Chemins des fichiers de données
+    const dataFiles = [
+      { path: path.join(__dirname, '../data/favorites.json'), filterKey: 'userId' },
+      { path: path.join(__dirname, '../data/panier.json'), filterKey: 'userId' },
+      { path: path.join(__dirname, '../data/orders.json'), filterKey: 'userId' },
+      { path: path.join(__dirname, '../data/commandes.json'), filterKey: 'userId' },
+      { path: path.join(__dirname, '../data/reviews.json'), filterKey: 'userId' },
+      { path: path.join(__dirname, '../data/preferences.json'), filterKey: 'userId' },
+      { path: path.join(__dirname, '../data/contacts.json'), filterKey: 'userId' },
+      { path: path.join(__dirname, '../data/client-chat.json'), filterKey: 'userId' },
+      { path: path.join(__dirname, '../data/cartes-bancaires.json'), filterKey: 'userId' }
+    ];
+    
+    // Supprimer les données de chaque fichier
+    for (const dataFile of dataFiles) {
+      try {
+        if (fs.existsSync(dataFile.path)) {
+          const data = JSON.parse(fs.readFileSync(dataFile.path));
+          const filteredData = data.filter(item => item[dataFile.filterKey] !== userId);
+          fs.writeFileSync(dataFile.path, JSON.stringify(filteredData, null, 2));
+        }
+      } catch (fileError) {
+        console.error(`Erreur lors de la suppression des données dans ${dataFile.path}:`, fileError);
+      }
+    }
+    
+    // Supprimer l'utilisateur lui-même
+    const filteredUsers = users.filter(u => u.id !== userId);
+    fs.writeFileSync(usersFilePath, JSON.stringify(filteredUsers, null, 2));
+    
+    res.json({ message: 'Profil et toutes les données associées supprimés avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du profil:', error);
+    res.status(500).json({ message: 'Erreur lors de la suppression du profil' });
+  }
+});
+
 // Vérifier le mot de passe d'un utilisateur
 router.post('/:id/verify-password', async (req, res) => {
   try {

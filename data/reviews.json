@@ -30,7 +30,11 @@
     "deliveryRating": 5,
     "comment": "Le perruque est très bien, le cheveu est de bonne qualité. la livraison est très rapide. Merci le vendeur",
     "createdAt": "2025-05-17T17:56:40.690Z",
-    "updatedAt": "2025-05-17T17:56:40.690Z"
+    "updatedAt": "2025-09-04T03:31:03.118Z",
+    "likes": [
+      "1756956649928"
+    ],
+    "likesCount": 1
   },
   {
     "id": "1747510282221",
