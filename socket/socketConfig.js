@@ -1,4 +1,3 @@
-
 const socketIO = require('socket.io');
 const socketAuth = require('./socketAuth');
 const {
@@ -21,17 +20,11 @@ const initializeSocket = (server) => {
           'http://localhost:3000',
           'https://riziky-boutic.vercel.app',
           'https://riziky-boutic.onrender.com',
-          'https://riziky-boutic-server.onrender.com',
-          'https://d18de9e1-f502-4cb4-bec0-327000f66a2d.lovableproject.com',
-          'https://id-preview--d18de9e1-f502-4cb4-bec0-327000f66a2d.lovable.app',
-          'https://b4bea8fe-de4c-46cf-bc64-943e6e52345e.sandbox.lovable.dev'
+          'https://riziky-boutic-server.onrender.com'
         ];
-        
-        if (!origin || 
-            allowedOrigins.indexOf(origin) !== -1 || 
-            origin.includes('lovable.app') || 
-            origin.includes('lovableproject.com') ||
-            origin.includes('sandbox.lovable.dev')) {
+
+        // Autorise les requêtes sans origin (ex: curl/Postman) et les origines listées
+        if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);
         } else {
           console.log(`Socket origine rejetée: ${origin}`);
@@ -46,14 +39,14 @@ const initializeSocket = (server) => {
     allowEIO3: true
   });
 
-  // Authentification plus souple pour Socket.io
+  // Middleware d'authentification pour socket.io
   io.use(socketAuth);
 
   // Gestion des connexions socket
   io.on('connection', (socket) => {
     console.log('Nouvelle connexion socket:', socket.id);
 
-    // Configurer tous les gestionnaires d'événements
+    // Enregistre tous les gestionnaires d'événements
     handleAuthentication(socket, io);
     handleVideoCallEvents(socket, io);
     handleChatEvents(socket, io);
