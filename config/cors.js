@@ -10,14 +10,16 @@ const corsOptions = {
       'https://riziky-boutic-server.onrender.com',
       // Ajout des domaines Lovable
       'https://d18de9e1-f502-4cb4-bec0-327000f66a2d.lovableproject.com',
-      'https://id-preview--d18de9e1-f502-4cb4-bec0-327000f66a2d.lovable.app'
+      'https://id-preview--d18de9e1-f502-4cb4-bec0-327000f66a2d.lovable.app',
+      'https://b4bea8fe-de4c-46cf-bc64-943e6e52345e.sandbox.lovable.dev'
     ];
     
-    // Autorise toutes les origines qui contiennent lovable.app ou lovableproject.com
+    // Autorise toutes les origines qui contiennent lovable.app, lovableproject.com ou sandbox.lovable.dev
     if (!origin || 
         allowedOrigins.indexOf(origin) !== -1 || 
         origin.includes('lovable.app') || 
-        origin.includes('lovableproject.com')) {
+        origin.includes('lovableproject.com') ||
+        origin.includes('sandbox.lovable.dev')) {
       callback(null, true);
     } else {
       console.log(`Origine rejetée: ${origin}`);

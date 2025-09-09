@@ -14,7 +14,30 @@ const {
 const initializeSocket = (server) => {
   const io = socketIO(server, {
     cors: {
-      origin: "*",
+      origin: function (origin, callback) {
+        const allowedOrigins = [
+          'http://localhost:8080', 
+          'http://localhost:5173',
+          'http://localhost:3000',
+          'https://riziky-boutic.vercel.app',
+          'https://riziky-boutic.onrender.com',
+          'https://riziky-boutic-server.onrender.com',
+          'https://d18de9e1-f502-4cb4-bec0-327000f66a2d.lovableproject.com',
+          'https://id-preview--d18de9e1-f502-4cb4-bec0-327000f66a2d.lovable.app',
+          'https://b4bea8fe-de4c-46cf-bc64-943e6e52345e.sandbox.lovable.dev'
+        ];
+        
+        if (!origin || 
+            allowedOrigins.indexOf(origin) !== -1 || 
+            origin.includes('lovable.app') || 
+            origin.includes('lovableproject.com') ||
+            origin.includes('sandbox.lovable.dev')) {
+          callback(null, true);
+        } else {
+          console.log(`Socket origine rejetée: ${origin}`);
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
       methods: ["GET", "POST"],
       credentials: true
     },
